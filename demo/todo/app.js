@@ -1,11 +1,7 @@
-import { signal, computed, tag, For, Show, mount } from "../../ztools.js";
+import { signal, computed, createTags, For, Show, mount } from "../../ztools.js";
 
-const div = tag("div");
-const h1 = tag("h1");
-const input = tag("input");
-const button = tag("button");
-const span = tag("span");
-const small = tag("small");
+
+const [div, h1, input, button, span, small] = createTags("div", "h1", "input", "button", "span", "small");
 
 function uid() {
   return String(Date.now()) + "-" + String(Math.random()).slice(2);

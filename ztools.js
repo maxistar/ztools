@@ -260,6 +260,10 @@ export function tag(name) {
   };
 }
 
+export function createTags(...tagNames) {
+  return tagNames.map((tagName) => tag(tagName));
+}
+
 // =========================
 // Control flow: Show, For
 // =========================

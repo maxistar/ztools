@@ -1,9 +1,9 @@
-import { signal, tag, mount, Show, For, computed } from "../../ztools.js";
+import { signal, createTags, mount, Show, For, computed } from "../../ztools.js";
 
-const div = tag("div");
-const h1 = tag("h1");
-const p = tag("p");
-const button = tag("button");
+
+
+const [div, h1, p, button] = createTags("div", "h1", "p", "button");
+
 
 function App() {
   const count = signal(0);
