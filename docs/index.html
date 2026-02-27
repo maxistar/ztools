@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools docs</title>
+  <style>
+    body { font-family: Inter, system-ui, Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 16px; line-height: 1.6; }
+    code, pre { background: #f6f8fa; border-radius: 6px; }
+    code { padding: 2px 6px; }
+    pre { padding: 12px; overflow-x: auto; }
+    h1, h2 { line-height: 1.25; }
+    .muted { color: #666; }
+    .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin: 10px 0; }
+    a { color: #0b57d0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>ztools</h1>
+  <p class="muted">Tiny JS-first reactive UI runtime.</p>
+
+  <div class="card">
+    <h2>Install</h2>
+    <pre><code>npm install ztools</code></pre>
+  </div>
+
+  <div class="card">
+    <h2>Quick start</h2>
+    <pre><code>import { signal, computed, createTags, mount } from "ztools";
+
+const [div, p, button] = createTags("div", "p", "button");
+
+function App() {
+  const count = signal(0);
+  const doubled = computed(() =&gt; count() * 2);
+
+  return div(
+    p("count: ", () =&gt; count(), " x2=", () =&gt; doubled()),
+    button({ onClick: () =&gt; count.set(count() + 1) }, "+1")
+  );
+}
+
+mount(App, document.body);
+</code></pre>
+  </div>
+
+  <div class="card">
+    <h2>API</h2>
+    <ul>
+      <li><code>signal</code>, <code>effect</code>, <code>computed</code>, <code>batch</code>, <code>onCleanup</code></li>
+      <li><code>h</code>, <code>tag</code>, <code>createTags</code></li>
+      <li><code>Show</code>, <code>For</code></li>
+      <li><code>mount</code></li>
+    </ul>
+  </div>
+
+  <p>
+    Source: <a href="https://github.com/maxistar/ztools" target="_blank" rel="noopener">github.com/maxistar/ztools</a>
+  </p>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "name": "ztools",
+  "version": "0.1.0",
+  "description": "Tiny JS-first reactive UI runtime",
+  "type": "module",
+  "main": "./ztools.js",
+  "module": "./ztools.js",
+  "types": "./ztools.d.ts",
+  "exports": {
+    ".": {
+      "types": "./ztools.d.ts",
+      "default": "./ztools.js"
+    }
+  },
+  "files": [
+    "ztools.js",
+    "ztools.d.ts",
+    "README.md",
+    "demo"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": [
+    "reactive",
+    "signals",
+    "dom",
+    "ui"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.2",
+    "globals": "^17.3.0",
+    "jsdom": "^24.1.0",
+    "vitest": "^2.0.5"
+  }
+}
