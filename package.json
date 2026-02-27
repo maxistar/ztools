@@ -5,11 +5,16 @@
   "type": "module",
   "main": "./ztools.js",
   "module": "./ztools.js",
+  "types": "./ztools.d.ts",
   "exports": {
-    ".": "./ztools.js"
+    ".": {
+      "types": "./ztools.d.ts",
+      "default": "./ztools.js"
+    }
   },
   "files": [
     "ztools.js",
+    "ztools.d.ts",
     "README.md",
     "demo"
   ],
