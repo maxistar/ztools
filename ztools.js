@@ -275,11 +275,33 @@ export function Show(when, render, fallback) {
   let current = null;
   let trueNode = null;
   let falseNode = null;
+  const attached = signal(false);
+  let attachObs = null;
 
   effect(() => {
+    // Ensure we re-evaluate once the anchor is attached to the DOM.
+    attached();
     const cond = (typeof when === "function") ? when() : when;
     const parent = anchor.parentNode;
-    if (!parent) return;
+    if (!parent) {
+      if (!attachObs) {
+        attachObs = new MutationObserver(() => {
+          if (anchor.parentNode) {
+            attachObs.disconnect();
+            attachObs = null;
+            attached.set(!attached());
+          }
+        });
+        attachObs.observe(document, { childList: true, subtree: true });
+      }
+      onCleanup(() => {
+        if (attachObs) {
+          attachObs.disconnect();
+          attachObs = null;
+        }
+      });
+      return;
+    }
 
     let next = null;
 
