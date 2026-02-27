@@ -9,8 +9,22 @@ export declare function effect(fn: () => void): () => void;
 export declare function batch<T>(fn: () => T): T;
 export declare function onCleanup(fn: () => void): void;
 
+export declare function h<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  ...args: any[]
+): HTMLElementTagNameMap[K];
 export declare function h(tag: string, ...args: any[]): HTMLElement;
+
+export declare function tag<K extends keyof HTMLElementTagNameMap>(
+  name: K
+): (...args: any[]) => HTMLElementTagNameMap[K];
 export declare function tag(name: string): (...args: any[]) => HTMLElement;
+
+export declare function createTags<
+  K extends readonly (keyof HTMLElementTagNameMap)[]
+>(
+  ...tagNames: K
+): { [I in keyof K]: (...args: any[]) => HTMLElementTagNameMap[K[I]] };
 export declare function createTags(...tagNames: string[]): Array<(...args: any[]) => HTMLElement>;
 
 export declare function Show<T>(
