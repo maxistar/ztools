@@ -1,6 +1,6 @@
-import { signal, createTags, mount } from "../../ztools.js";
+import { signal, tags, mount } from "../../ztools.js";
 
-const [div, label, select, option] = createTags("div", "label", "select", "option");
+const { div, label, select, option } = tags;
 
 function App() {
   const color = signal("red");
@@ -16,8 +16,8 @@ function App() {
           value: () => color(),
           onChange: (e) => color.set(e.target.value),
         },
-        colors.map((c) => option({ value: c }, c))
-      )
+        colors.map((c) => option({ value: c }, c)),
+      ),
     ),
     div(
       {
@@ -28,8 +28,8 @@ function App() {
           fontWeight: "bold",
         }),
       },
-      "Hello"
-    )
+      "Hello",
+    ),
   );
 }
 
