@@ -43,13 +43,19 @@ export function mount(Component, container) {
     container.__ztoolsDispose = null;
   }
 
-  const dispose = enhance(container, (root) => {
+  const ownerDispose = enhance(container, (root) => {
     const node = Component();
     if (!(node instanceof Node)) throw new Error("mount(): Component must return a DOM Node");
 
     root.innerHTML = "";
     root.appendChild(node);
   });
+
+  const dispose = function () {
+    ownerDispose();
+    container.innerHTML = "";
+    if (container.__ztoolsDispose === dispose) container.__ztoolsDispose = null;
+  };
 
   container.__ztoolsDispose = dispose;
   return dispose;

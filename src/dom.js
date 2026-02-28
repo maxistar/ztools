@@ -151,6 +151,14 @@ export function tag(name) {
   };
 }
 
+export function createTags() {
+  const out = new Array(arguments.length);
+  for (let i = 0; i < arguments.length; i++) {
+    out[i] = tag(arguments[i]);
+  }
+  return out;
+}
+
 export const tags = new Proxy(
   {},
   {
