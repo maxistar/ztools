@@ -22,12 +22,12 @@
 
   <div class="card">
     <h2>Install</h2>
-    <pre><code>npm install ztools</code></pre>
+    <pre><code>npm install @maxi.star/ztools</code></pre>
   </div>
 
   <div class="card">
     <h2>Quick start</h2>
-    <pre><code>import { signal, computed, createTags, mount } from "ztools";
+    <pre><code>import { signal, computed, createTags, mount } from "@maxi.star/ztools";
 
 const [div, p, button] = createTags("div", "p", "button");
 
@@ -49,15 +49,21 @@ mount(App, document.body);
     <h2>API</h2>
     <ul>
       <li><code>signal</code>, <code>effect</code>, <code>computed</code>, <code>batch</code>, <code>onCleanup</code></li>
-      <li><code>h</code>, <code>tag</code>, <code>createTags</code></li>
+      <li><code>h</code>, <code>tag</code>, <code>createTags</code>, <code>tags</code></li>
       <li><code>Show</code>, <code>For</code></li>
-      <li><code>mount</code></li>
+      <li><code>mount</code>, <code>enhance</code></li>
     </ul>
   </div>
 
   <div class="card">
     <h2>Examples</h2>
     <p>Live demos are published here: <a href="./examples/">/examples/</a></p>
+  </div>
+
+  <div class="card">
+    <h2>Deploy Flow</h2>
+    <p>GitHub Pages is deployed from a generated <code>build/</code> artifact.</p>
+    <pre><code>npm run build:pages</code></pre>
   </div>
 
   <p>
