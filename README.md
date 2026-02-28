@@ -12,7 +12,7 @@ Tiny JavaScript-first reactive UI runtime (no virtual DOM, no compile step).
 ## Install
 
 ```bash
-npm install ztools
+npm install @maxi.star/ztools
 ```
 
 ## Quick start
@@ -51,6 +51,7 @@ mount(App, document.body);
 ### DOM
 - `h(tag, ...args)` -> create element
 - `tag(name)` / `createTags(...names)` -> ergonomic tag factories
+- `tags` -> proxy-based tag factory (`tags.div(...)`, `tags.button(...)`)
 
 ### Control flow
 - `Show(when, render, fallback?)`
@@ -58,12 +59,21 @@ mount(App, document.body);
 
 ### Mounting
 - `mount(Component, container)` -> returns `dispose()`
+- `enhance(root, setup)` -> attach reactive behavior to existing DOM
 
 ## Development
 
 ```bash
 npm install
 npm test
+npm run build:pages
 ```
 
-Demos are in `demo/`.
+Demos source is in `demo/`.
+GitHub Pages artifact is generated in `build/` (copied from `docs/` plus built examples/runtime files), so you can test locally before deployment.
+
+Example local preview:
+
+```bash
+npx serve build
+```

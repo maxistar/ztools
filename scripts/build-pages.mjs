@@ -7,19 +7,21 @@ const __dirname = path.dirname(__filename);
 const root = path.resolve(__dirname, "..");
 
 const docsDir = path.join(root, "docs");
-const examplesDir = path.join(docsDir, "examples");
+const buildDir = path.join(root, "build");
+const examplesDir = path.join(buildDir, "examples");
 const demoDir = path.join(root, "demo");
 
-await mkdir(docsDir, { recursive: true });
+await rm(buildDir, { recursive: true, force: true });
+await cp(docsDir, buildDir, { recursive: true });
 await rm(examplesDir, { recursive: true, force: true });
 await mkdir(examplesDir, { recursive: true });
 
 // Keep runtime available for copied examples.
-await cp(path.join(root, "ztools.js"), path.join(docsDir, "ztools.js"));
-await cp(path.join(root, "ztools.client.js"), path.join(docsDir, "ztools.client.js"));
-await cp(path.join(root, "ztools.ssr.js"), path.join(docsDir, "ztools.ssr.js"));
-await rm(path.join(docsDir, "src"), { recursive: true, force: true });
-await cp(path.join(root, "src"), path.join(docsDir, "src"), { recursive: true });
+await cp(path.join(root, "ztools.js"), path.join(buildDir, "ztools.js"));
+await cp(path.join(root, "ztools.client.js"), path.join(buildDir, "ztools.client.js"));
+await cp(path.join(root, "ztools.ssr.js"), path.join(buildDir, "ztools.ssr.js"));
+await rm(path.join(buildDir, "src"), { recursive: true, force: true });
+await cp(path.join(root, "src"), path.join(buildDir, "src"), { recursive: true });
 
 // Copy all demos into docs/examples
 await cp(demoDir, examplesDir, { recursive: true });
@@ -56,4 +58,4 @@ const html = `<!doctype html>
 </html>`;
 
 await writeFile(path.join(examplesDir, "index.html"), html, "utf8");
-console.log(`Built pages examples: ${demos.join(", ")}`);
+console.log(`Built pages content in ./build with examples: ${demos.join(", ")}`);

@@ -1,7 +1,7 @@
 {
-  "name": "ztools",
-  "version": "0.1.0",
-  "description": "Tiny JS-first reactive UI runtime",
+  "name": "@maxi.star/ztools",
+  "version": "0.0.1",
+  "description": "Tiny DOM-first reactive UI runtime",
   "type": "module",
   "main": "./ztools.js",
   "module": "./ztools.js",
