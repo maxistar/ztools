@@ -5,6 +5,10 @@ on:
     branches: [ develop, main ]
     paths:
       - 'docs/**'
+      - 'demo/**'
+      - 'scripts/**'
+      - 'ztools.js'
+      - 'package.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -26,6 +30,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build Pages content
+        run: npm run build:pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
