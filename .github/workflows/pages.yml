@@ -7,7 +7,10 @@ on:
       - 'docs/**'
       - 'demo/**'
       - 'scripts/**'
+      - 'src/**'
       - 'ztools.js'
+      - 'ztools.client.js'
+      - 'ztools.ssr.js'
       - 'package.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:

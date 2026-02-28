@@ -14,8 +14,12 @@ await mkdir(docsDir, { recursive: true });
 await rm(examplesDir, { recursive: true, force: true });
 await mkdir(examplesDir, { recursive: true });
 
-// Keep runtime available for copied examples: ../../ztools.js => docs/ztools.js
+// Keep runtime available for copied examples.
 await cp(path.join(root, "ztools.js"), path.join(docsDir, "ztools.js"));
+await cp(path.join(root, "ztools.client.js"), path.join(docsDir, "ztools.client.js"));
+await cp(path.join(root, "ztools.ssr.js"), path.join(docsDir, "ztools.ssr.js"));
+await rm(path.join(docsDir, "src"), { recursive: true, force: true });
+await cp(path.join(root, "src"), path.join(docsDir, "src"), { recursive: true });
 
 // Copy all demos into docs/examples
 await cp(demoDir, examplesDir, { recursive: true });
