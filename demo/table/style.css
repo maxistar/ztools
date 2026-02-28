@@ -1,0 +1,13 @@
+body { font-family: system-ui, sans-serif; padding: 20px; }
+.app { max-width: 900px; margin: 0 auto; }
+.toolbar { display: flex; gap: 12px; align-items: center; margin: 12px 0; }
+input { padding: 8px 10px; width: 420px; max-width: 100%; }
+.table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #eee; }
+th { cursor: pointer; user-select: none; }
+.muted { opacity: 0.7; }
+.hint { opacity: 0.4; margin-left: 6px; font-size: 12px; }
+th.active .hint { opacity: 1; }
+th.asc .hint::after { content: " ↑"; }
+th.desc .hint::after { content: " ↓"; }
+code { background: #f6f6f6; padding: 2px 6px; border-radius: 6px; }

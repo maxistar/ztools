@@ -1,0 +1,22 @@
+body { font-family: system-ui, sans-serif; padding: 20px; }
+.app { max-width: 900px; margin: 0 auto; }
+.row { display: flex; gap: 8px; align-items: center; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+input { padding: 8px; width: 100%; box-sizing: border-box; }
+button { padding: 8px 12px; }
+.card { border: 1px solid #eee; border-radius: 10px; padding: 12px; margin-top: 12px; }
+.list { margin-top: 12px; }
+.item {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+.item strong { display: block; }
+.muted { opacity: 0.7; }
+.error { color: #b00020; }
+.toolbar { display: flex; gap: 8px; justify-content: space-between; align-items: center; }
+code { background: #f6f6f6; padding: 2px 6px; border-radius: 6px; }
+small { opacity: 0.75; }

@@ -1,6 +1,6 @@
-import { signal, createTags, mount } from "../../ztools.js";
+import { signal, tags, mount } from "../../ztools.js";
 
-const [div, button, span, input] = createTags("div", "button", "span", "input");
+const { div, button, span, input } = tags;
 
 function App() {
   const tool = signal("pencil");
@@ -108,14 +108,14 @@ function App() {
           className: () => (tool() === "pencil" ? "active" : ""),
           onClick: () => tool.set("pencil"),
         },
-        "Pencil"
+        "Pencil",
       ),
       button(
         {
           className: () => (tool() === "eraser" ? "active" : ""),
           onClick: () => tool.set("eraser"),
         },
-        "Eraser"
+        "Eraser",
       ),
       span("Size:"),
       input({
@@ -126,7 +126,7 @@ function App() {
         onInput: (e) => brushSize.set(Number(e.target.value)),
       }),
       span(() => String(brushSize())),
-      button({ onClick: clearCanvas }, "Clear")
+      button({ onClick: clearCanvas }, "Clear"),
     ),
     div(
       { className: "canvas-wrap" },
@@ -138,8 +138,8 @@ function App() {
           attachCanvasEvents(c);
         });
         return c;
-      })()
-    )
+      })(),
+    ),
   );
 }
 

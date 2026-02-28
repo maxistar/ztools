@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ztools • DOM-first table</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <h1>Contacts (DOM-first)</h1>
+
+      <div class="toolbar">
+        <input id="q" placeholder="Filter by name/email/phone…" />
+        <span class="muted">Shown: <strong id="shown">0</strong></span>
+      </div>
+
+      <table id="contacts" class="table">
+        <thead>
+          <tr>
+            <th data-sort="name">Name <span class="hint">⇅</span></th>
+            <th data-sort="email">Email <span class="hint">⇅</span></th>
+            <th data-sort="phone">Phone <span class="hint">⇅</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Пререндеренные строки (как будто пришли с сервера) -->
+          <tr data-row data-name="Alice" data-email="alice@example.com" data-phone="+49 111 111">
+            <td>Alice</td><td>alice@example.com</td><td>+49 111 111</td>
+          </tr>
+          <tr data-row data-name="Bob" data-email="bob@example.com" data-phone="+49 222 222">
+            <td>Bob</td><td>bob@example.com</td><td>+49 222 222</td>
+          </tr>
+          <tr data-row data-name="Clara" data-email="clara@example.com" data-phone="+49 333 333">
+            <td>Clara</td><td>clara@example.com</td><td>+49 333 333</td>
+          </tr>
+          <tr data-row data-name="Max" data-email="max@ztools.org" data-phone="+49 444 444">
+            <td>Max</td><td>max@ztools.org</td><td>+49 444 444</td>
+          </tr>
+          <tr data-row data-name="Dora" data-email="dora@example.com" data-phone="+49 555 555">
+            <td>Dora</td><td>dora@example.com</td><td>+49 555 555</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="muted">
+        This demo keeps existing rows and just toggles <code>hidden</code> + reorders rows in <code>tbody</code>.
+      </p>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,13 +1,19 @@
-import { signal, computed, createTags, For, mount } from "../../ztools.js";
+import { signal, computed, tags, For, mount } from "../../ztools.js";
 
-const [div, h1, p, span, section, colorPicker] = createTags("div", "h1", "p", "span", "section", "color-picker");
+const { div, h1, p, span, section, colorPicker } = tags;
 
 function normalizeHex(value) {
   if (!value) return "#000000";
   let v = String(value).trim();
   if (!v.startsWith("#")) v = "#" + v;
   if (/^#[0-9a-fA-F]{3}$/.test(v)) {
-    v = "#" + v.slice(1).split("").map(ch => ch + ch).join("");
+    v =
+      "#" +
+      v
+        .slice(1)
+        .split("")
+        .map((ch) => ch + ch)
+        .join("");
   }
   if (!/^#[0-9a-fA-F]{6}$/.test(v)) return "#000000";
   return v.toLowerCase();
@@ -21,7 +27,9 @@ function isValidHex(value) {
 }
 
 class ColorPicker extends HTMLElement {
-  static get observedAttributes() { return ["value", "label"]; }
+  static get observedAttributes() {
+    return ["value", "label"];
+  }
 
   constructor() {
     super();
@@ -57,7 +65,7 @@ class ColorPicker extends HTMLElement {
       this._preview,
       this._input,
       this._text,
-      this._hint
+      this._hint,
     );
 
     const style = document.createElement("style");
@@ -153,7 +161,9 @@ class ColorPicker extends HTMLElement {
     this._sync();
   }
 
-  get value() { return this._value; }
+  get value() {
+    return this._value;
+  }
   set value(next) {
     const v = normalizeHex(next);
     if (v === this._value) return;
@@ -163,7 +173,9 @@ class ColorPicker extends HTMLElement {
     this._sync();
   }
 
-  get label() { return this._label; }
+  get label() {
+    return this._label;
+  }
   set label(next) {
     this._label = next || "Pick a color";
     this.setAttribute("label", this._label);
@@ -171,10 +183,12 @@ class ColorPicker extends HTMLElement {
   }
 
   _emit() {
-    this.dispatchEvent(new CustomEvent("colorchange", {
-      detail: { value: this._value },
-      bubbles: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent("colorchange", {
+        detail: { value: this._value },
+        bubbles: true,
+      }),
+    );
   }
 
   _sync() {
@@ -201,7 +215,7 @@ function App() {
     const value = normalizeHex(event.detail?.value || event.target?.value);
     selected.set(value);
 
-    const next = [value, ...history().filter(v => v !== value)].slice(0, 8);
+    const next = [value, ...history().filter((v) => v !== value)].slice(0, 8);
     history.set(next);
   }
 
@@ -212,8 +226,8 @@ function App() {
       h1({ className: "title" }, "Color Picker"),
       p(
         { className: "subtitle" },
-        "A small web component demo with a reactive preview and history."
-      )
+        "A small web component demo with a reactive preview and history.",
+      ),
     ),
 
     section(
@@ -222,27 +236,31 @@ function App() {
         { className: "row" },
         div(
           { className: "preview", style: () => ({ background: selected() }) },
-          span({ className: "preview-label" }, () => previewText())
+          span({ className: "preview-label" }, () => previewText()),
         ),
         div(
           { className: "swatches" },
           colorPicker({
             label: "Primary Color",
             value: () => selected(),
-            onColorchange: onPick
+            onColorchange: onPick,
           }),
-          div({ className: "color-chip", style: () => ({ background: selected() }) })
-        )
+          div({
+            className: "color-chip",
+            style: () => ({ background: selected() }),
+          }),
+        ),
       ),
       div(
         { className: "notice" },
-        "Tip: type a hex code directly or tap a recent swatch."
-      )
+        "Tip: type a hex code directly or tap a recent swatch.",
+      ),
     ),
 
     section(
       { className: "panel" },
-      div({ className: "swatches" },
+      div(
+        { className: "swatches" },
         div(null, "Recent swatches"),
         div(
           { className: "swatch-grid" },
@@ -250,15 +268,15 @@ function App() {
             div(
               {
                 className: "swatch",
-                onClick: () => onPick({ detail: { value: hex } })
+                onClick: () => onPick({ detail: { value: hex } }),
               },
               div({ className: "swatch-chip", style: { background: hex } }),
-              div({ className: "swatch-code" }, hex.toUpperCase())
-            )
-          )
-        )
-      )
-    )
+              div({ className: "swatch-code" }, hex.toUpperCase()),
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 }
 
