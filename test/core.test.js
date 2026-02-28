@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { signal, computed, effect, batch, createTags, For, mount } from '../ztools.js';
+import { signal, computed, effect, batch, createTags, For, Show, mount } from '../ztools.js';
 
 describe('reactive core', () => {
   it('signal/effect reacts to set', () => {
@@ -66,5 +66,52 @@ describe('dom helpers', () => {
     list.set([{ id: 2, t: 'B' }, { id: 3, t: 'C' }]);
     expect(node.textContent).toContain('B');
     expect(node.textContent).toContain('C');
+  });
+
+  it('For keeps DOM order in sync when items are reordered', () => {
+    const [div] = createTags('div');
+    const list = signal([
+      { id: '1', t: 'A' },
+      { id: '2', t: 'B' },
+      { id: '3', t: 'C' },
+    ]);
+
+    const node = For(list, (item) => div({ 'data-id': item.id }, item.t), (item) => item.id);
+    document.body.appendChild(node);
+
+    const order1 = Array.from(node.children).map((el) => el.getAttribute('data-id'));
+    expect(order1).toEqual(['1', '2', '3']);
+
+    list.set([
+      { id: '3', t: 'C' },
+      { id: '1', t: 'A' },
+      { id: '2', t: 'B' },
+    ]);
+
+    const order2 = Array.from(node.children).map((el) => el.getAttribute('data-id'));
+    expect(order2).toEqual(['3', '1', '2']);
+  });
+
+  it('Show toggles rendered branch', async () => {
+    const [div] = createTags('div');
+    const visible = signal(true);
+
+    const host = div(
+      Show(
+        () => visible(),
+        () => div({ id: 'on' }, 'ON'),
+        () => div({ id: 'off' }, 'OFF')
+      )
+    );
+
+    document.body.appendChild(host);
+    await new Promise((r) => setTimeout(r, 0));
+    expect(host.textContent).toBe('ON');
+
+    visible.set(false);
+    expect(host.textContent).toBe('OFF');
+
+    visible.set(true);
+    expect(host.textContent).toBe('ON');
   });
 });
