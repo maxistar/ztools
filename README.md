@@ -12,7 +12,7 @@ Tiny JavaScript-first reactive UI runtime (no virtual DOM, no compile step).
 ## Install
 
 ```bash
-npm install @maxi.star/ztools
+npm install @ztools.org/runtime
 ```
 
 ## Quick start
