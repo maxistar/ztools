@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools getting started</title>
+  <style>
+    body {
+      font-family: Inter, system-ui, Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 16px;
+      line-height: 1.7;
+    }
+    h1, h2 { line-height: 1.25; }
+    code, pre { background: #f6f8fa; border-radius: 6px; }
+    code { padding: 2px 6px; }
+    pre { padding: 12px; overflow-x: auto; }
+    .muted { color: #666; }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 10px 0;
+    }
+    a { color: #0b57d0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="./index.html">Docs Home</a>
+    <a href="./philosophy.html">Philosophy</a>
+    <a href="./getting-started.html"><strong>Getting Started</strong></a>
+    <a href="./examples/">Examples</a>
+  </nav>
+
+  <h1>Getting Started</h1>
+  <p class="muted">A 5-minute path to your first reactive UI with ztools.</p>
+
+  <div class="card">
+    <h2>1) Install</h2>
+    <pre><code>npm install @maxi.star/ztools</code></pre>
+  </div>
+
+  <div class="card">
+    <h2>2) Create a simple app</h2>
+    <pre><code>import { signal, computed, createTags, mount } from "@maxi.star/ztools";
+
+const [div, p, button] = createTags("div", "p", "button");
+
+function App() {
+  const count = signal(0);
+  const doubled = computed(() => count() * 2);
+
+  return div(
+    p("count: ", () => count(), " | doubled: ", () => doubled()),
+    button({ onClick: () => count.set(count() + 1) }, "Increment")
+  );
+}
+
+mount(App, document.getElementById("app"));
+</code></pre>
+  </div>
+
+  <div class="card">
+    <h2>3) Understand the core idea</h2>
+    <ul>
+      <li><code>signal()</code> stores reactive state</li>
+      <li><code>computed()</code> derives values from signals</li>
+      <li>Functions in JSX-like children/props (e.g. <code>() =&gt; count()</code>) re-render reactively</li>
+      <li><code>mount()</code> renders your component into the DOM</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>4) Next steps</h2>
+    <ul>
+      <li>Read <a href="./philosophy.html">Philosophy</a></li>
+      <li>Open <a href="./examples/">Examples</a> and inspect source code</li>
+      <li>Try <code>Show</code> and <code>For</code> for conditional and list rendering</li>
+    </ul>
+  </div>
+</body>
+</html>
