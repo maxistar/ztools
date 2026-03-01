@@ -113,7 +113,7 @@ function TodoApp() {
                 span({ className: "title" }, t.title),
                 button({ onClick: () => remove(t.id) }, "×"),
               ),
-            (t) => t.id,
+            (t) => `${t.id}|${t.done}`,
           ),
       ),
     ),
