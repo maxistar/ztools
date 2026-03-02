@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Generate SSR demo page (server-side)
+        run: npm run generate:ssr-demo
+
       - name: Build Pages content
         run: npm run build:pages
 

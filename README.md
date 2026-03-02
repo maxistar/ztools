@@ -65,11 +65,13 @@ mount(App, document.body);
 
 ```bash
 npm install
+npm run generate:ssr-demo
 npm test
 npm run build:pages
 ```
 
 Demos source is in `demo/`.
+SSR demo page is generated server-side from `demo/ssr/generate-ssr-page.mjs` into `demo/ssr/index.html`.
 GitHub Pages artifact is generated in `build/` (copied from `docs/` plus built examples/runtime files), so you can test locally before deployment.
 
 Example local preview:

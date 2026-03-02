@@ -25,7 +25,8 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build:pages": "node ./scripts/build-pages.mjs"
+    "build:pages": "node ./scripts/build-pages.mjs",
+    "generate:ssr-demo": "node ./demo/ssr/generate-ssr-page.mjs"
   },
   "keywords": [
     "reactive",
