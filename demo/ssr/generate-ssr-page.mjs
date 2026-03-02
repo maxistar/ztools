@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToString, tags } from "../../ztools.ssr.js";
@@ -58,15 +58,7 @@ const listItems = [
   "Publish static artifacts to GitHub Pages",
 ];
 
-const codeExample = `import { renderToString, tags } from "../../ztools.ssr.js";
-const { html, body, h1 } = tags;
-
-const page = html(
-  { lang: "en" },
-  body(h1("SSR Demo from ztools.ssr.js"))
-);
-
-const output = "<!doctype html>\\n" + renderToString(page);`;
+const codeExample = await readFile(__filename, "utf8");
 
 function renderPage() {
   const page = html(
