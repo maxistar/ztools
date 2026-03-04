@@ -7,32 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const outputPath = path.join(__dirname, "index.html");
 
-const {
-  html,
-  head,
-  body,
-  meta,
-  title,
-  style,
-  h1,
-  h2,
-  p,
-  section,
-  table,
-  thead,
-  tbody,
-  tr,
-  th,
-  td,
-  form,
-  label,
-  input,
-  button,
-  ul,
-  li,
-  pre,
-  code,
-} = tags;
+const { html, head, body, meta, title, style, h1, h2, p, section, table, thead, tbody, tr, th, td, form, label, input, button, ul, li, pre, code } = tags;
 
 const tableRows = [
   {
