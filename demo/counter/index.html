@@ -1,20 +1,45 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ztools demo</title>
-    <style>
-      body {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        margin: 24px;
-      }
-      button {
-        margin-top: 8px;
-      }
-    </style>
-  </head>
-  <body>
-    <script type="module" src="./main.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools counter demo</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Counter Demo</h1>
+    <div class="counter-display">
+      <span>Count: </span>
+      <span id="count-value">0</span>
+    </div>
+    <div class="counter-controls">
+      <button id="decrement">-</button>
+      <button id="increment">+</button>
+    </div>
+    <pre class="source-code"><code>
+import { signal, createTags, mount } from "../../ztools.js";
+
+const [div, span, button] = createTags("div", "span", "button");
+
+function App() {
+  const count = signal(0);
+
+  return div(
+    { className: "counter-display" },
+    span("Count: "),
+    span({ id: "count-value" }, () => count())
+  ),
+  div(
+    { className: "counter-controls" },
+    button({ id: "decrement", onClick: () => count.set(count() - 1) }, "-"),
+    button({ id: "increment", onClick: () => count.set(count() + 1) }, "+")
+  );
+}
+
+mount(App, document.body);
+    </code></pre>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
 </html>
