@@ -7,17 +7,8 @@
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Counter Demo</h1>
-    <div class="counter-display">
-      <span>Count: </span>
-      <span id="count-value">0</span>
-    </div>
-    <div class="counter-controls">
-      <button id="decrement">-</button>
-      <button id="increment">+</button>
-    </div>
-    <pre class="source-code"><code>
+  <div id="app-container"></div>
+  <pre class="source-code"><code>
 import { signal, createTags, mount } from "../../ztools.js";
 
 const [div, span, button] = createTags("div", "span", "button");
@@ -37,9 +28,8 @@ function App() {
   );
 }
 
-mount(App, document.body);
-    </code></pre>
-  </div>
+mount(App, document.getElementById('app-container'));
+  </code></pre>
   <script type="module" src="./main.js"></script>
 </body>
 </html>
