@@ -1,6 +1,6 @@
 {
   "name": "@ztools.org/runtime",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Tiny DOM-first reactive UI runtime",
   "type": "module",
   "main": "./ztools.js",
