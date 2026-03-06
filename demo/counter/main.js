@@ -30,4 +30,4 @@ function App() {
   );
 }
 
-mount(App, document.body);
+mount(App, document.getElementById('app-container'));

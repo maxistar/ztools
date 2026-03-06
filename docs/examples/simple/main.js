@@ -1,9 +1,6 @@
-import { signal, createTags, mount, Show, For, computed } from "../../ztools.js";
+import { signal, tags, mount, Show, For, computed } from "../../ztools.js";
 
-
-
-const [div, h1, p, button] = createTags("div", "h1", "p", "button");
-
+const { div, h1, p, button } = tags;
 
 function App() {
   const count = signal(0);
@@ -16,10 +13,20 @@ function App() {
 
   return div(
     h1("ztools demo"),
-    p("count: ", () => count(), " (x2=", () => doubled(), ")"),
+    p(
+      "count: ",
+      () => count(),
+      " (x2=",
+      () => doubled(),
+      ")",
+    ),
     button({ onClick: () => count.set(count() + 1) }, "+1"),
-    Show(show, () => div("even"), () => div("odd")),
-    For(items, (it, idx) => div(() => (idx() + 1) + ". " + it.title))
+    Show(
+      show,
+      () => div("even"),
+      () => div("odd"),
+    ),
+    For(items, (it, idx) => div(() => idx() + 1 + ". " + it.title)),
   );
 }
 

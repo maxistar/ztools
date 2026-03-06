@@ -24,6 +24,15 @@ export function tag(name) {
   return (props, ...children) => h(name, props, ...children);
 }
 
+export const tags = new Proxy(
+  {},
+  {
+    get(_, name) {
+      return tag(name);
+    },
+  },
+);
+
 export function renderToString(node) {
   return render(node);
 

@@ -1,0 +1,11 @@
+docs/
+demo/
+build/
+test/
+scripts/
+.github/
+.codex/
+openspec/
+
+vitest.config.js
+eslint.config.js

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools counter demo</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app-container"></div>
+  <pre class="source-code"><code>
+import { signal, createTags, mount } from "../../ztools.js";
+
+const [div, span, button] = createTags("div", "span", "button");
+
+function App() {
+  const count = signal(0);
+
+  return div(
+    { className: "counter-display" },
+    span("Count: "),
+    span({ id: "count-value" }, () => count())
+  ),
+  div(
+    { className: "counter-controls" },
+    button({ id: "decrement", onClick: () => count.set(count() - 1) }, "-"),
+    button({ id: "increment", onClick: () => count.set(count() + 1) }, "+")
+  );
+}
+
+mount(App, document.getElementById('app-container'));
+  </code></pre>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {
-  "name": "ztools",
-  "version": "0.1.0",
-  "description": "Tiny JS-first reactive UI runtime",
+  "name": "@ztools.org/runtime",
+  "version": "0.0.2",
+  "description": "Tiny DOM-first reactive UI runtime",
   "type": "module",
   "main": "./ztools.js",
   "module": "./ztools.js",
@@ -14,16 +14,19 @@
   },
   "files": [
     "ztools.js",
+    "ztools.client.js",
+    "ztools.ssr.js",
     "ztools.d.ts",
-    "README.md",
-    "demo"
+    "src",
+    "README.md"
   ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build:pages": "node ./scripts/build-pages.mjs"
+    "build:pages": "node ./scripts/build-pages.mjs",
+    "generate:ssr-demo": "node ./demo/ssr/generate-ssr-page.mjs"
   },
   "keywords": [
     "reactive",
@@ -38,5 +41,8 @@
     "globals": "^17.3.0",
     "jsdom": "^24.1.0",
     "vitest": "^2.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

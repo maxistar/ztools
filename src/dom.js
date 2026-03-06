@@ -274,10 +274,11 @@ export function For(listSignal, renderItem, keyFn) {
       }
     }
 
-    // remove missing
+    // remove missing (O(n) with Set)
+    const nextKeySet = new Set(nextKeys);
     for (let p = 0; p < prevKeys.length; p++) {
       const k = prevKeys[p];
-      if (nextKeys.indexOf(k) === -1) {
+      if (!nextKeySet.has(k)) {
         const oldNode = keyed.get(k);
         if (oldNode && oldNode.parentNode === host) host.removeChild(oldNode);
         keyed.delete(k);

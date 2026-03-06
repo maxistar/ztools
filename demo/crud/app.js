@@ -251,7 +251,8 @@ function AddressBookApp() {
                       ),
                     ),
                   ),
-                (c) => c.id,
+                // Include value fingerprint in key so edited item rerenders
+                (c) => `${c.id}|${c.name}|${c.email}|${c.phone}`, 
               ),
           ),
       ),
