@@ -108,6 +108,55 @@ export declare const tags: {
   [tagName: string]: (...args: ElementArg<HTMLElement>[]) => HTMLElement;
 };
 
+export interface AttrBag {
+  __zAttrBag: true;
+  value: Record<string, unknown>;
+}
+
+export interface PropBag {
+  __zPropBag: true;
+  value: Record<string, unknown>;
+}
+
+export interface ChainBuilder<E extends HTMLElement = HTMLElement> {
+  (...args: ElementArg<E>[]): E;
+  p(props?: ElementProps<E>): ChainBuilder<E>;
+  smart(props?: ElementProps<E>): ChainBuilder<E>;
+  attrs(attrs?: Record<string, unknown>): ChainBuilder<E>;
+  a(attrs?: Record<string, unknown>): ChainBuilder<E>;
+  attr(name: string, value: unknown): ChainBuilder<E>;
+  propsOnly(props?: Record<string, unknown>): ChainBuilder<E>;
+  po(props?: Record<string, unknown>): ChainBuilder<E>;
+  prop(name: string, value: unknown): ChainBuilder<E>;
+  className(...names: Array<string | false | null | undefined>): ChainBuilder<E>;
+  c(...names: Array<string | false | null | undefined>): ChainBuilder<E>;
+  id(id: string): ChainBuilder<E>;
+  style(styleObj?: Partial<CSSStyleDeclaration> | null): ChainBuilder<E>;
+  on(eventName: string, fn: EventListener): ChainBuilder<E>;
+  onClick(fn: EventListener): ChainBuilder<E>;
+  onInput(fn: EventListener): ChainBuilder<E>;
+  onChange(fn: EventListener): ChainBuilder<E>;
+  onKeydown(fn: EventListener): ChainBuilder<E>;
+  onSubmit(fn: EventListener): ChainBuilder<E>;
+  data(name: string, value: unknown): ChainBuilder<E>;
+  aria(name: string, value: unknown): ChainBuilder<E>;
+  tagName: string;
+  _smartProps: Record<string, unknown>;
+  _attrs: Record<string, unknown>;
+  _props: Record<string, unknown>;
+}
+
+export declare function createChainTags<K extends keyof HTMLElementTagNameMap>(
+  ...tagNames: K[]
+): { [P in K]: ChainBuilder<HTMLElementTagNameMap[P]> };
+export declare function createChainTags(
+  ...tagNames: string[]
+): Record<string, ChainBuilder<HTMLElement>>;
+
+export declare const chainTags: {
+  [tagName: string]: ChainBuilder<HTMLElement>;
+};
+
 export declare function Show<T>(
   when: (() => T) | T,
   render: (value: T) => Node,

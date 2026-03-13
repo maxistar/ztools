@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { signal, computed, effect, batch, createTags, For, Show, mount } from '../ztools.js';
+import { signal, computed, effect, batch, createTags, createChainTags, chainTags, For, Show, mount } from '../ztools.js';
 
 describe('reactive core', () => {
   it('signal/effect reacts to set', () => {
@@ -113,5 +113,52 @@ describe('dom helpers', () => {
 
     visible.set(true);
     expect(host.textContent).toBe('ON');
+  });
+
+  it('createChainTags merges smart props across chained calls', () => {
+    const { button } = createChainTags('button');
+    const node = button
+      .className('primary')
+      .style({ color: 'red' })
+      .p({ className: 'wide', style: { backgroundColor: 'black' }, type: 'button' })('Click');
+
+    expect(node.className).toBe('primary wide');
+    expect(node.style.color).toBe('red');
+    expect(node.style.backgroundColor).toBe('black');
+    expect(node.getAttribute('type')).toBe('button');
+    expect(node.textContent).toBe('Click');
+  });
+
+  it('chainTags can force attrs and props independently', () => {
+    const value = signal('hello');
+    const input = chainTags.input
+      .attr('value', 'attr-value')
+      .prop('value', () => value())
+      .attr('data-mode', 'forced')();
+
+    expect(input.getAttribute('value')).toBe('attr-value');
+    expect(input.value).toBe('hello');
+    expect(input.getAttribute('data-mode')).toBe('forced');
+
+    value.set('updated');
+    expect(input.value).toBe('updated');
+    expect(input.getAttribute('value')).toBe('attr-value');
+  });
+
+  it('chain builders keep events and inline props working', () => {
+    let clicks = 0;
+    const node = chainTags.button
+      .className('base')
+      .onClick(() => {
+        clicks += 1;
+      })
+      ({ className: 'inline', type: 'button' }, 'Run');
+
+    node.click();
+
+    expect(clicks).toBe(1);
+    expect(node.className).toBe('base inline');
+    expect(node.getAttribute('type')).toBe('button');
+    expect(node.textContent).toBe('Run');
   });
 });

@@ -43,29 +43,79 @@ function setProp(el, key, val) {
   else el.setAttribute(key, String(val));
 }
 
+function applySingleProp(el, key, val) {
+  if (key === "ref" && typeof val === "function") {
+    val(el);
+    return;
+  }
+
+  if (key.slice(0, 2) === "on" && typeof val === "function") {
+    el.addEventListener(key.slice(2).toLowerCase(), val);
+    return;
+  }
+
+  if (typeof val === "function") {
+    ((nextKey, getter) => {
+      effect(() => setProp(el, nextKey, getter()));
+    })(key, val);
+    return;
+  }
+
+  setProp(el, key, val);
+}
+
+function setAttrForced(el, key, val) {
+  if (typeof val === "function") {
+    effect(() => setAttrForced(el, key, val()));
+    return;
+  }
+
+  if (val == null || val === false) {
+    el.removeAttribute(key);
+    return;
+  }
+
+  if (val === true) {
+    el.setAttribute(key, "");
+    return;
+  }
+
+  el.setAttribute(key, String(val));
+}
+
+function setPropForced(el, key, val) {
+  if (typeof val === "function") {
+    effect(() => {
+      try {
+        el[key] = val();
+      } catch {}
+    });
+    return;
+  }
+
+  try {
+    el[key] = val;
+  } catch {
+    if (val == null) el.removeAttribute(key);
+    else el.setAttribute(key, String(val));
+  }
+}
+
 function applyProps(el, props) {
-  for (const k in props) {
-    const v = props[k];
+  if (props && props.__zAttrBag === true) {
+    const attrs = props.value || {};
+    for (const key in attrs) setAttrForced(el, key, attrs[key]);
+    return;
+  }
 
-    if (k === "ref" && typeof v === "function") {
-      v(el);
-      continue;
-    }
+  if (props && props.__zPropBag === true) {
+    const forcedProps = props.value || {};
+    for (const key in forcedProps) setPropForced(el, key, forcedProps[key]);
+    return;
+  }
 
-    if (k.slice(0, 2) === "on" && typeof v === "function") {
-      el.addEventListener(k.slice(2).toLowerCase(), v);
-      continue;
-    }
-
-    // reactive prop/attr
-    if (typeof v === "function") {
-      ((key, getter) => {
-        effect(() => setProp(el, key, getter()));
-      })(k, v);
-      continue;
-    }
-
-    setProp(el, k, v);
+  for (const key in props) {
+    applySingleProp(el, key, props[key]);
   }
 }
 
