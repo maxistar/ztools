@@ -6,6 +6,7 @@ Tiny JavaScript-first reactive UI runtime (no virtual DOM, no compile step).
 
 - Reactive primitives: `signal`, `effect`, `computed`, `batch`, `onCleanup`
 - DOM helpers: `h`, `tag`, `createTags`
+- Chainable builders: `chainTags`, `createChainTags`
 - Control flow: `Show`, `For` (keyed)
 - App mounting: `mount(Component, container)` with cleanup
 
@@ -52,6 +53,7 @@ mount(App, document.body);
 - `h(tag, ...args)` -> create element
 - `tag(name)` / `createTags(...names)` -> ergonomic tag factories
 - `tags` -> proxy-based tag factory (`tags.div(...)`, `tags.button(...)`)
+- `createChainTags(...names)` / `chainTags` -> chainable builders with smart props plus explicit `.attr()` / `.prop()` control
 
 ### Control flow
 - `Show(when, render, fallback?)`
