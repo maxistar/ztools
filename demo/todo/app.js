@@ -1,123 +1,73 @@
-import { signal, computed, tags, For, Show, mount } from "../../ztools.js";
+import { signal, createTags, mount, effect, computed } from "../../ztools.js";
 
-const { div, h1, input, button, span, small } = tags;
+const { div, input, label, button, checkbox } = createTags("div", "input", "label", "button", "input");
 
-function uid() {
-  return String(Date.now()) + "-" + String(Math.random()).slice(2);
-}
-
-function TodoApp() {
+function App() {
   const todos = signal([
-    { id: uid(), title: "Try ztools", done: false },
-    { id: uid(), title: "Build something small", done: true },
+    { id: 1, text: "Learn ztools", done: false },
+    { id: 2, text: "Build a todo app", done: false },
+    { id: 3, text: "Enjoy the demo", done: false },
   ]);
 
-  const text = signal("");
-  const filter = signal("all"); // all | active | done
+  const newTodo = signal("");
 
-  const stats = computed(() => {
-    const list = todos();
-    const total = list.length;
-    const done = list.filter((t) => t.done).length;
-    return { total, done, active: total - done };
-  });
+  const addTodo = () => {
+    if (newTodo().trim()) {
+      todos.set([
+        ...todos(),
+        { id: todos().length + 1, text: newTodo(), done: false },
+      ]);
+      newTodo.set("");
+    }
+  };
 
-  const visible = computed(() => {
-    const f = filter();
-    const list = todos();
-    if (f === "active") return list.filter((t) => !t.done);
-    if (f === "done") return list.filter((t) => t.done);
-    return list;
-  });
-
-  function add() {
-    const v = text().trim();
-    if (!v) return;
-    todos.set([{ id: uid(), title: v, done: false }, ...todos()]);
-    text.set("");
-  }
-
-  function toggle(id) {
-    todos.set(todos().map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
-  }
-
-  function remove(id) {
-    todos.set(todos().filter((t) => t.id !== id));
-  }
-
-  function clearDone() {
-    todos.set(todos().filter((t) => !t.done));
-  }
-
-  function setAll(done) {
-    todos.set(todos().map((t) => ({ ...t, done })));
-  }
-
-  function FilterPill(name, label) {
-    return span(
-      {
-        className: () => "pill" + (filter() === name ? " active" : ""),
-        onClick: () => filter.set(name),
-      },
-      label,
+  const toggleTodo = (index) => {
+    todos.set(
+      todos().map((t, i) => (i === index ? { ...t, done: !t.done } : t))
     );
-  }
+  };
+
+  const completedTodos = computed(() =>
+    todos().filter((t) => t.done).length
+  );
+
+  const remainingTodos = computed(() =>
+    todos().filter((t) => !t.done).length
+  );
 
   return div(
-    { className: "app" },
-    h1("Todo List"),
-
+    { className: "container" },
     div(
-      { className: "row" },
+      { className: "todo-list" },
+      todos().map((todo, index) =>
+        div(
+          { className: "todo-item" },
+          checkbox({
+            type: "checkbox",
+            checked: () => todo.done,
+            onChange: () => toggleTodo(index),
+          }),
+          label(todo.text)
+        )
+      )
+    ),
+    div(
+      { className: "todo-input" },
       input({
         type: "text",
-        placeholder: "What needs to be done?",
-        value: () => text(),
-        onInput: (e) => text.set(e.target.value),
-        onKeydown: (e) => {
-          if (e.key === "Enter") add();
-        },
+        value: () => newTodo(),
+        onInput: (e) => newTodo.set(e.target.value),
+        placeholder: "Add a new todo",
       }),
-      button({ onClick: add }, "Add"),
+      button({ onClick: addTodo }, "Add")
     ),
-
     div(
-      { className: "filters" },
-      FilterPill("all", () => "All (" + stats().total + ")"),
-      FilterPill("active", () => "Active (" + stats().active + ")"),
-      FilterPill("done", () => "Done (" + stats().done + ")"),
-    ),
-
-    div(
-      { className: "row" },
-      button({ onClick: () => setAll(true) }, "Mark all done"),
-      button({ onClick: () => setAll(false) }, "Mark all active"),
-      button({ onClick: clearDone }, "Clear done"),
-    ),
-
-    div(
-      Show(
-        () => visible().length === 0,
-        () => small("No todos here."),
-        () =>
-          For(
-            visible,
-            (t) =>
-              div(
-                { className: () => "todo" + (t.done ? " done" : "") },
-                input({
-                  type: "checkbox",
-                  checked: t.done,
-                  onChange: () => toggle(t.id),
-                }),
-                span({ className: "title" }, t.title),
-                button({ onClick: () => remove(t.id) }, "×"),
-              ),
-            (t) => `${t.id}|${t.done}`,
-          ),
-      ),
-    ),
+      "Completed: ",
+      () => completedTodos(),
+      " / Remaining: ",
+      () => remainingTodos()
+    )
   );
 }
 
-mount(TodoApp, document.body);
+mount(App, document.body);
