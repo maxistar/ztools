@@ -161,4 +161,42 @@ describe('dom helpers', () => {
     node.dispatchEvent(new Event('change'));
     expect(inputEvents).toBe(2);
   });
+
+  it('supports reactive attrs and boolean attr removal in attrs bag', () => {
+    const [div] = createTags('div');
+    const state = signal(true);
+
+    const node = div({
+      attrs: {
+        'data-state': () => (state() ? 'on' : 'off'),
+        hidden: () => !state(),
+      },
+    });
+
+    document.body.appendChild(node);
+
+    expect(node.getAttribute('data-state')).toBe('on');
+    expect(node.hasAttribute('hidden')).toBe(false);
+
+    state.set(false);
+    expect(node.getAttribute('data-state')).toBe('off');
+    expect(node.hasAttribute('hidden')).toBe(true);
+  });
+
+  it('supports on bag with both click and onClick keys', () => {
+    const [button] = createTags('button');
+    let count = 0;
+
+    const node = button({
+      on: {
+        click: () => count++,
+        onClick: () => count++,
+      },
+    }, 'Go');
+
+    document.body.appendChild(node);
+    node.click();
+
+    expect(count).toBe(2);
+  });
 });
