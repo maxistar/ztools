@@ -199,4 +199,22 @@ describe('dom helpers', () => {
 
     expect(count).toBe(2);
   });
+
+  it('supports ref callback for imperative element access', () => {
+    const [div, input, button] = createTags('div', 'input', 'button');
+    let inputEl;
+
+    const node = div(
+      input({ ref: (el) => { inputEl = el; } }),
+      button({ onClick: () => inputEl.focus() }, 'Focus')
+    );
+
+    document.body.appendChild(node);
+
+    const btn = node.querySelector('button');
+    btn.click();
+
+    expect(inputEl).toBeInstanceOf(HTMLInputElement);
+    expect(document.activeElement).toBe(inputEl);
+  });
 });
