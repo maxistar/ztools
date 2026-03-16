@@ -1,4 +1,20 @@
-import { signal, computed, mount, tags as t } from "../../ztools.js";
+import { h, signal, computed, mount, tags as t } from "../../ztools.js";
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+function svgTag(name) {
+    return function () {
+        const el = document.createElementNS(SVG_NS, name);
+        return h.apply(null, [el, ...arguments]);
+    };
+}
+
+const s = {
+    svg: svgTag("svg"),
+    g: svgTag("g"),
+    path: svgTag("path"),
+    text: svgTag("text")
+};
 
 function polarToCartesian(cx, cy, r, angleDeg) {
     const angleRad = (angleDeg - 90) * Math.PI / 180;
@@ -9,9 +25,24 @@ function polarToCartesian(cx, cy, r, angleDeg) {
 }
 
 function describeArc(cx, cy, r, startAngle, endAngle) {
+    const angleSpan = endAngle - startAngle;
+    if (angleSpan <= 0) {
+        return "";
+    }
+
+    // SVG elliptical arcs cannot represent a full circle with a single arc command.
+    if (angleSpan >= 360) {
+        return [
+            "M", cx, cy - r,
+            "A", r, r, 0, 1, 1, cx, cy + r,
+            "A", r, r, 0, 1, 1, cx, cy - r,
+            "Z"
+        ].join(" ");
+    }
+
     const start = polarToCartesian(cx, cy, r, endAngle);
     const end = polarToCartesian(cx, cy, r, startAngle);
-    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+    const largeArcFlag = angleSpan > 180 ? 1 : 0;
 
     return [
         "M", cx, cy,
@@ -22,12 +53,18 @@ function describeArc(cx, cy, r, startAngle, endAngle) {
 }
 
 function PieChart({ data, width = 520, height = 320, radius = 110 }) {
-    const cx = 160;
-    const cy = 160;
-    const total = computed(() => data().reduce((sum, item) => sum + item.value, 0));
+    const cx = width / 2;
+    const cy = height / 2;
+    const normalizedData = computed(() =>
+        data().map((item) => ({
+            ...item,
+            value: Number.isFinite(item.value) && item.value > 0 ? item.value : 0
+        }))
+    );
+    const total = computed(() => normalizedData().reduce((sum, item) => sum + item.value, 0));
 
     const slices = computed(() => {
-        const list = data();
+        const list = normalizedData();
         const sum = total();
         let angle = 0;
 
@@ -44,7 +81,7 @@ function PieChart({ data, width = 520, height = 320, radius = 110 }) {
                 ...item,
                 startAngle,
                 endAngle,
-                path: describeArc(cx, cy, radius, startAngle, endAngle),
+                path: valueAngle === 0 ? "" : describeArc(cx, cy, radius, startAngle, endAngle),
                 labelX: labelPos.x,
                 labelY: labelPos.y,
                 percent: sum === 0 ? 0 : Math.round((item.value / sum) * 100)
@@ -64,7 +101,7 @@ function PieChart({ data, width = 520, height = 320, radius = 110 }) {
         },
 
         // SVG chart
-        t.svg(
+        s.svg(
             {
                 attrs: {
                     width,
@@ -77,7 +114,7 @@ function PieChart({ data, width = 520, height = 320, radius = 110 }) {
             },
 
             // title
-            t.text(
+            s.text(
                 {
                     attrs: { x: 20, y: 24, fill: "#111" },
                     props: { textContent: "Distribution" },
@@ -90,8 +127,8 @@ function PieChart({ data, width = 520, height = 320, radius = 110 }) {
 
             // slices
             () => slices().map((slice) =>
-                t.g(
-                    t.path({
+                s.g(
+                    s.path({
                         attrs: {
                             d: slice.path,
                             fill: slice.color,
@@ -102,7 +139,7 @@ function PieChart({ data, width = 520, height = 320, radius = 110 }) {
 
                     // label only if slice is large enough
                     () => slice.percent >= 5
-                        ? t.text(
+                        ? s.text(
                             {
                                 attrs: {
                                     x: slice.labelX,
