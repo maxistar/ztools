@@ -148,12 +148,76 @@ function appendChild(el, child) {
 
   // reactive text: () => ...
   if (typeof child === "function") {
-    const tn = document.createTextNode("");
-    el.appendChild(tn);
+    const start = document.createComment("z:expr");
+    const end = document.createComment("z:/expr");
+    el.appendChild(start);
+    el.appendChild(end);
+
+    let current = []; // текущие вставленные nodes между start/end
+
+    function normalizeToNodes(v) {
+      if (v == null || v === false) return [];
+
+      // array (can be nested)
+      if (Array.isArray(v)) {
+        const out = [];
+        for (let i = 0; i < v.length; i++) {
+          const part = normalizeToNodes(v[i]);
+          for (let j = 0; j < part.length; j++) out.push(part[j]);
+        }
+        return out;
+      }
+
+      // DOM Node
+      if (v instanceof Node) return [v];
+
+      // string/number/other -> Text node
+      if (typeof v === "string" || typeof v === "number") {
+        return [document.createTextNode(String(v))];
+      }
+
+      // fallback: stringify
+      return [document.createTextNode(String(v))];
+    }
+
+    function clearRange() {
+      for (let i = 0; i < current.length; i++) {
+        const n = current[i];
+        if (n && n.parentNode) n.parentNode.removeChild(n);
+      }
+      current = [];
+    }
+
+    function insertAfterStart(nodes) {
+      const parent = start.parentNode;
+      if (!parent) return;
+
+      // Insert in order right after start, before end
+      let ref = end;
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        parent.insertBefore(nodes[i], ref);
+        ref = nodes[i];
+      }
+      current = nodes;
+    }
+
     effect(() => {
       const v = child();
-      tn.nodeValue = v == null ? "" : String(v);
+      const next = normalizeToNodes(v);
+
+      // If same node references in same order, skip (cheap identity check)
+      if (next.length === current.length) {
+        let same = true;
+        for (let i = 0; i < next.length; i++) {
+          if (next[i] !== current[i]) { same = false; break; }
+        }
+        if (same) return;
+      }
+
+      clearRange();
+      insertAfterStart(next);
     });
+
     return;
   }
 
