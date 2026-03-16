@@ -43,29 +43,98 @@ function setProp(el, key, val) {
   else el.setAttribute(key, String(val));
 }
 
+function setAttrForced(el, key, val) {
+  if (val == null || val === false) {
+    el.removeAttribute(key);
+    return;
+  }
+
+  if (val === true) {
+    el.setAttribute(key, "");
+    return;
+  }
+
+  if (typeof val === "function") {
+    effect(() => setAttrForced(el, key, val()));
+    return;
+  }
+
+  el.setAttribute(key, String(val));
+}
+
+function setPropForced(el, key, val) {
+  if (typeof val === "function") {
+    effect(() => {
+      try {
+        el[key] = val();
+      } catch {}
+    });
+    return;
+  }
+
+  try {
+    el[key] = val;
+  } catch {
+    if (val == null) el.removeAttribute(key);
+    else el.setAttribute(key, String(val));
+  }
+}
+
+function applySingleProp(el, k, v) {
+  if (k === "ref" && typeof v === "function") {
+    v(el);
+    return;
+  }
+
+  if (k.slice(0, 2) === "on" && typeof v === "function") {
+    el.addEventListener(k.slice(2).toLowerCase(), v);
+    return;
+  }
+
+  // reactive prop/attr
+  if (typeof v === "function") {
+    ((key, getter) => {
+      effect(() => setProp(el, key, getter()));
+    })(k, v);
+    return;
+  }
+
+  setProp(el, k, v);
+}
+
 function applyProps(el, props) {
   for (const k in props) {
     const v = props[k];
 
-    if (k === "ref" && typeof v === "function") {
-      v(el);
+    if (k === "attrs" && v && typeof v === "object") {
+      for (const attrName in v) {
+        setAttrForced(el, attrName, v[attrName]);
+      }
       continue;
     }
 
-    if (k.slice(0, 2) === "on" && typeof v === "function") {
-      el.addEventListener(k.slice(2).toLowerCase(), v);
+    if (k === "props" && v && typeof v === "object") {
+      for (const propName in v) {
+        setPropForced(el, propName, v[propName]);
+      }
       continue;
     }
 
-    // reactive prop/attr
-    if (typeof v === "function") {
-      ((key, getter) => {
-        effect(() => setProp(el, key, getter()));
-      })(k, v);
+    if (k === "on" && v && typeof v === "object") {
+      for (const eventName in v) {
+        const handler = v[eventName];
+        if (typeof handler !== "function") continue;
+
+        const normalized = eventName.slice(0, 2) === "on"
+          ? eventName.slice(2).toLowerCase()
+          : eventName.toLowerCase();
+
+        el.addEventListener(normalized, handler);
+      }
       continue;
     }
 
-    setProp(el, k, v);
+    applySingleProp(el, k, v);
   }
 }
 
