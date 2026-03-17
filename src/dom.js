@@ -43,29 +43,98 @@ function setProp(el, key, val) {
   else el.setAttribute(key, String(val));
 }
 
+function setAttrForced(el, key, val) {
+  if (val == null || val === false) {
+    el.removeAttribute(key);
+    return;
+  }
+
+  if (val === true) {
+    el.setAttribute(key, "");
+    return;
+  }
+
+  if (typeof val === "function") {
+    effect(() => setAttrForced(el, key, val()));
+    return;
+  }
+
+  el.setAttribute(key, String(val));
+}
+
+function setPropForced(el, key, val) {
+  if (typeof val === "function") {
+    effect(() => {
+      try {
+        el[key] = val();
+      } catch {}
+    });
+    return;
+  }
+
+  try {
+    el[key] = val;
+  } catch {
+    if (val == null) el.removeAttribute(key);
+    else el.setAttribute(key, String(val));
+  }
+}
+
+function applySingleProp(el, k, v) {
+  if (k === "ref" && typeof v === "function") {
+    v(el);
+    return;
+  }
+
+  if (k.slice(0, 2) === "on" && typeof v === "function") {
+    el.addEventListener(k.slice(2).toLowerCase(), v);
+    return;
+  }
+
+  // reactive prop/attr
+  if (typeof v === "function") {
+    ((key, getter) => {
+      effect(() => setProp(el, key, getter()));
+    })(k, v);
+    return;
+  }
+
+  setProp(el, k, v);
+}
+
 function applyProps(el, props) {
   for (const k in props) {
     const v = props[k];
 
-    if (k === "ref" && typeof v === "function") {
-      v(el);
+    if (k === "attrs" && v && typeof v === "object") {
+      for (const attrName in v) {
+        setAttrForced(el, attrName, v[attrName]);
+      }
       continue;
     }
 
-    if (k.slice(0, 2) === "on" && typeof v === "function") {
-      el.addEventListener(k.slice(2).toLowerCase(), v);
+    if (k === "props" && v && typeof v === "object") {
+      for (const propName in v) {
+        setPropForced(el, propName, v[propName]);
+      }
       continue;
     }
 
-    // reactive prop/attr
-    if (typeof v === "function") {
-      ((key, getter) => {
-        effect(() => setProp(el, key, getter()));
-      })(k, v);
+    if (k === "on" && v && typeof v === "object") {
+      for (const eventName in v) {
+        const handler = v[eventName];
+        if (typeof handler !== "function") continue;
+
+        const normalized = eventName.slice(0, 2) === "on"
+          ? eventName.slice(2).toLowerCase()
+          : eventName.toLowerCase();
+
+        el.addEventListener(normalized, handler);
+      }
       continue;
     }
 
-    setProp(el, k, v);
+    applySingleProp(el, k, v);
   }
 }
 
@@ -79,12 +148,76 @@ function appendChild(el, child) {
 
   // reactive text: () => ...
   if (typeof child === "function") {
-    const tn = document.createTextNode("");
-    el.appendChild(tn);
+    const start = document.createComment("z:expr");
+    const end = document.createComment("z:/expr");
+    el.appendChild(start);
+    el.appendChild(end);
+
+    let current = []; // текущие вставленные nodes между start/end
+
+    function normalizeToNodes(v) {
+      if (v == null || v === false) return [];
+
+      // array (can be nested)
+      if (Array.isArray(v)) {
+        const out = [];
+        for (let i = 0; i < v.length; i++) {
+          const part = normalizeToNodes(v[i]);
+          for (let j = 0; j < part.length; j++) out.push(part[j]);
+        }
+        return out;
+      }
+
+      // DOM Node
+      if (v instanceof Node) return [v];
+
+      // string/number/other -> Text node
+      if (typeof v === "string" || typeof v === "number") {
+        return [document.createTextNode(String(v))];
+      }
+
+      // fallback: stringify
+      return [document.createTextNode(String(v))];
+    }
+
+    function clearRange() {
+      for (let i = 0; i < current.length; i++) {
+        const n = current[i];
+        if (n && n.parentNode) n.parentNode.removeChild(n);
+      }
+      current = [];
+    }
+
+    function insertAfterStart(nodes) {
+      const parent = start.parentNode;
+      if (!parent) return;
+
+      // Insert in order right after start, before end
+      let ref = end;
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        parent.insertBefore(nodes[i], ref);
+        ref = nodes[i];
+      }
+      current = nodes;
+    }
+
     effect(() => {
       const v = child();
-      tn.nodeValue = v == null ? "" : String(v);
+      const next = normalizeToNodes(v);
+
+      // If same node references in same order, skip (cheap identity check)
+      if (next.length === current.length) {
+        let same = true;
+        for (let i = 0; i < next.length; i++) {
+          if (next[i] !== current[i]) { same = false; break; }
+        }
+        if (same) return;
+      }
+
+      clearRange();
+      insertAfterStart(next);
     });
+
     return;
   }
 

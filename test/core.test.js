@@ -114,4 +114,107 @@ describe('dom helpers', () => {
     visible.set(true);
     expect(host.textContent).toBe('ON');
   });
+
+  it('supports explicit attrs/props/on bags', () => {
+    const [button] = createTags('button');
+    let clicks = 0;
+
+    const node = button({
+      attrs: { 'data-role': 'cta' },
+      props: { type: 'button', textContent: 'Save' },
+      on: { click: () => clicks++ },
+    });
+
+    document.body.appendChild(node);
+
+    expect(node.getAttribute('data-role')).toBe('cta');
+    expect(node.type).toBe('button');
+    expect(node.textContent).toBe('Save');
+
+    node.click();
+    expect(clicks).toBe(1);
+  });
+
+  it('keeps legacy prop syntax working together with bags', () => {
+    const [input] = createTags('input');
+    const value = signal('A');
+    let inputEvents = 0;
+
+    const node = input({
+      attrs: { 'data-kind': 'field' },
+      props: { value },
+      on: { input: () => inputEvents++ },
+      className: 'legacy-ok',
+      onChange: () => inputEvents++,
+    });
+
+    document.body.appendChild(node);
+
+    expect(node.getAttribute('data-kind')).toBe('field');
+    expect(node.className).toBe('legacy-ok');
+    expect(node.value).toBe('A');
+
+    value.set('B');
+    expect(node.value).toBe('B');
+
+    node.dispatchEvent(new Event('input'));
+    node.dispatchEvent(new Event('change'));
+    expect(inputEvents).toBe(2);
+  });
+
+  it('supports reactive attrs and boolean attr removal in attrs bag', () => {
+    const [div] = createTags('div');
+    const state = signal(true);
+
+    const node = div({
+      attrs: {
+        'data-state': () => (state() ? 'on' : 'off'),
+        hidden: () => !state(),
+      },
+    });
+
+    document.body.appendChild(node);
+
+    expect(node.getAttribute('data-state')).toBe('on');
+    expect(node.hasAttribute('hidden')).toBe(false);
+
+    state.set(false);
+    expect(node.getAttribute('data-state')).toBe('off');
+    expect(node.hasAttribute('hidden')).toBe(true);
+  });
+
+  it('supports on bag with both click and onClick keys', () => {
+    const [button] = createTags('button');
+    let count = 0;
+
+    const node = button({
+      on: {
+        click: () => count++,
+        onClick: () => count++,
+      },
+    }, 'Go');
+
+    document.body.appendChild(node);
+    node.click();
+
+    expect(count).toBe(2);
+  });
+
+  it('supports ref callback for imperative element access', () => {
+    const [div, input, button] = createTags('div', 'input', 'button');
+    let inputEl;
+
+    const node = div(
+      input({ ref: (el) => { inputEl = el; } }),
+      button({ onClick: () => inputEl.focus() }, 'Focus')
+    );
+
+    document.body.appendChild(node);
+
+    const btn = node.querySelector('button');
+    btn.click();
+
+    expect(inputEl).toBeInstanceOf(HTMLInputElement);
+    expect(document.activeElement).toBe(inputEl);
+  });
 });

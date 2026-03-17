@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>z-donut-chart demo</title>
+</head>
+<body>
+<z-donut-chart id="chart" title="Traffic sources"></z-donut-chart>
+
+<script type="module">
+    import "./z-donut-chart.js";
+
+    const chart = document.getElementById("chart");
+
+    chart.data = [
+        { label: "Desktop", value: 45, color: "#4f46e5" },
+        { label: "Mobile", value: 30, color: "#06b6d4" },
+        { label: "Tablet", value: 15, color: "#10b981" },
+        { label: "Other", value: 10, color: "#f59e0b" }
+    ];
+
+    chart.addEventListener("sliceclick", (e) => {
+        console.log("sliceclick", e.detail.slice);
+    });
+
+    chart.addEventListener("error", (e) => {
+        console.warn("chart error", e.detail);
+    });
+</script>
+</body>
+</html>

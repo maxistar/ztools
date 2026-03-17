@@ -76,30 +76,48 @@ function styleObjToCss(obj) {
   return s;
 }
 
+function renderSingleAttrLike(k, v) {
+  if (typeof v === "function") v = v();
+  if (v == null || v === false) return "";
+
+  // never SSR events
+  if (k.startsWith("on") && typeof v === "function") return "";
+
+  const attr = (k === "className") ? "class" : k;
+
+  if (v === true) return ` ${attr}`;
+
+  if (attr === "style" && typeof v === "object") {
+    return ` style="${escAttr(styleObjToCss(v))}"`;
+  }
+
+  return ` ${attr}="${escAttr(String(v))}"`;
+}
+
 function renderAttrs(props) {
   if (!props) return "";
   let out = "";
 
+  // explicit attrs bag
+  if (props.attrs && typeof props.attrs === "object") {
+    for (const k in props.attrs) {
+      out += renderSingleAttrLike(k, props.attrs[k]);
+    }
+  }
+
+  // explicit props bag (SSR fallback to attributes for compatibility)
+  if (props.props && typeof props.props === "object") {
+    for (const k in props.props) {
+      out += renderSingleAttrLike(k, props.props[k]);
+    }
+  }
+
+  // explicit event bag is intentionally ignored on SSR
+
+  // legacy / regular props still supported
   for (const k in props) {
-    const v = props[k];
-    if (v == null || v === false) continue;
-
-    // never SSR events
-    if (k.startsWith("on") && typeof v === "function") continue;
-
-    const attr = (k === "className") ? "class" : k;
-
-    if (v === true) {
-      out += ` ${attr}`;
-      continue;
-    }
-
-    if (attr === "style" && typeof v === "object") {
-      out += ` style="${escAttr(styleObjToCss(v))}"`;
-      continue;
-    }
-
-    out += ` ${attr}="${escAttr(String(v))}"`;
+    if (k === "attrs" || k === "props" || k === "on") continue;
+    out += renderSingleAttrLike(k, props[k]);
   }
 
   return out;
