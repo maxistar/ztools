@@ -127,7 +127,7 @@ function App() {
         ),
         t.div(
           { className: "swatches" },
-          t.colorPicker({
+          t["color-picker"]({
             label: "Primary Color",
             value: () => selected(),
             onColorchange: onPick,
