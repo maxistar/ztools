@@ -4,29 +4,8 @@ import {
     computed,
     effect,
     tags as t,
-    h
 } from "../../dist/ztools.client.full.js";
-
-/* =========================
-   SVG helpers
-========================= */
-
-const SVG_NS = "http://www.w3.org/2000/svg";
-
-function svgTag(name) {
-    return function () {
-        const el = document.createElementNS(SVG_NS, name);
-        return h.apply(null, [el, ...arguments]);
-    };
-}
-
-const s = {
-    svg: svgTag("svg"),
-    g: svgTag("g"),
-    path: svgTag("path"),
-    rect: svgTag("rect"),
-    text: svgTag("text")
-};
+import { DonutChartSvg } from "./donut-chart-svg.js";
 
 /* =========================
    Geometry helpers
@@ -294,154 +273,20 @@ defineComponent("z-donut-chart", (props, host) => {
       }
     `),
 
-        s.svg(
-            {
-                width: () => width(),
-                height: () => height(),
-                viewBox: () => `0 0 ${width()} ${height()}`,
-                style: {
-                    overflow: "visible",
-                    display: "block"
-                }
-            },
-
-            s.text(
-                {
-                    x: 20,
-                    y: 28,
-                    fill: "#111",
-                    style: {
-                        fontSize: "18px",
-                        fontWeight: "600"
-                    }
-                },
-                () => title()
-            ),
-
-            // slices
-            () => slices().map((slice) => {
-                const isActive = () => hovered() === slice.index;
-
-                return s.g(
-                    s.path({
-                        d: slice.path,
-                        fill: slice.color,
-                        stroke: "#fff",
-                        "stroke-width": () => isActive() ? 4 : 2,
-                        opacity: () => {
-                            const h = hovered();
-                            return h == null || h === slice.index ? 1 : 0.72;
-                        },
-                        style: {
-                            cursor: "pointer",
-                            transition: "opacity 120ms ease"
-                        },
-                        onMouseenter: () => hovered.set(slice.index),
-                        onMouseleave: () => hovered.set(null),
-                        onClick: () => props.emit("sliceclick", { slice })
-                    }),
-
-                    () => slice.percent >= 8
-                        ? s.text(
-                            {
-                                x: slice.labelX,
-                                y: slice.labelY,
-                                fill: "#111",
-                                "text-anchor": "middle",
-                                "dominant-baseline": "middle",
-                                style: {
-                                    fontSize: "12px",
-                                    fontWeight: "600",
-                                    pointerEvents: "none"
-                                }
-                            },
-                            `${slice.percent}%`
-                        )
-                        : null
-                );
-            }),
-
-            // center labels
-            s.text(
-                {
-                    x: () => cx(),
-                    y: () => cy() - 8,
-                    "text-anchor": "middle",
-                    fill: "#666",
-                    style: {
-                        fontSize: "12px",
-                        fontWeight: "500"
-                    }
-                },
-                "Total"
-            ),
-
-            s.text(
-                {
-                    x: () => cx(),
-                    y: () => cy() + 18,
-                    "text-anchor": "middle",
-                    fill: "#111",
-                    style: {
-                        fontSize: "28px",
-                        fontWeight: "700"
-                    }
-                },
-                () => Math.round(total())
-            ),
-
-            // tooltip
-            () => {
-                const s1 = activeSlice();
-                if (!s1) return null;
-
-                const pos = polarToCartesian(cx(), cy(), outerR() + 28, s1.midAngle);
-                const boxW = 128;
-                const boxH = 54;
-                const x = pos.x - boxW / 2;
-                const y = pos.y - boxH / 2;
-
-                return s.g(
-                    { style: { pointerEvents: "none" } },
-
-                    s.rect({
-                        x,
-                        y,
-                        rx: 10,
-                        ry: 10,
-                        width: boxW,
-                        height: boxH,
-                        fill: "white",
-                        stroke: "#ddd"
-                    }),
-
-                    s.text(
-                        {
-                            x: x + 12,
-                            y: y + 20,
-                            fill: "#111",
-                            style: {
-                                fontSize: "12px",
-                                fontWeight: "700"
-                            }
-                        },
-                        s1.label
-                    ),
-
-                    s.text(
-                        {
-                            x: x + 12,
-                            y: y + 39,
-                            fill: "#555",
-                            style: {
-                                fontSize: "12px"
-                            }
-                        },
-                        `${Math.round(s1.value)} (${s1.percent}%)`
-                    )
-                );
-            }
-        ),
+        DonutChartSvg({
+            width,
+            height,
+            title,
+            cx,
+            cy,
+            outerR,
+            slices,
+            hovered,
+            setHovered: (i) => hovered.set(i),
+            activeSlice,
+            total,
+            onSliceClick: (slice) => props.emit("sliceclick", { slice }),
+        }),
 
         t.div(
             { className: "legend" },
