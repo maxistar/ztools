@@ -2,6 +2,7 @@ import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToString, tags, rawHtml } from "../ztools.ssr.js";
+import { codeToHtml } from "shiki";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +14,22 @@ const examplesDir = path.join(buildDir, "examples");
 const demoPagesDir = path.join(buildDir, "demo");
 const demoDir = path.join(root, "demo");
 const runtimeFiles = ["ztools.js", "ztools.client.js", "ztools.ssr.js"];
+
+const EXT_TO_LANG = {
+  ".js": "javascript",
+  ".mjs": "javascript",
+  ".ts": "typescript",
+  ".html": "html",
+  ".css": "css",
+  ".json": "json",
+  ".md": "markdown",
+};
+
+async function highlight(code, filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  const lang = EXT_TO_LANG[ext] || "text";
+  return codeToHtml(code, { lang, theme: "github-dark" });
+}
 const sourceOrder = [".js", ".mjs", ".html", ".css"];
 
 const {
@@ -123,10 +140,11 @@ async function getExampleMetadata(name) {
   });
 
   const sourceFiles = await Promise.all(
-    orderedFiles.map(async (relPath) => ({
-      path: relPath,
-      content: await readFile(path.join(sourceDir, relPath), "utf8"),
-    })),
+    orderedFiles.map(async (relPath) => {
+      const content = await readFile(path.join(sourceDir, relPath), "utf8");
+      const highlightedHtml = await highlight(content, relPath);
+      return { path: relPath, content, highlightedHtml };
+    }),
   );
 
   return {
@@ -149,18 +167,28 @@ function escapeJson(data) {
 
 function renderWrapperPage(example) {
   const filesJson = escapeJson(
-    example.sourceFiles.map((f) => ({ path: f.path, content: f.content })),
+    example.sourceFiles.map((f) => ({
+      path: f.path,
+      highlightedHtml: f.highlightedHtml,
+    })),
   );
 
   // Inline module script: mounts an interactive file-tabs viewer using ztools
   const inlineScript = `
-import { signal, tags, mount, For } from "../../ztools.js";
-const { div, button, pre, code, span } = tags;
+import { signal, tags, mount, For, effect } from "../../ztools.js";
+const { div, button } = tags;
 
 const files = JSON.parse(document.getElementById("zt-source-data").textContent);
 
 function FileTabs() {
   const active = signal(files[0]?.path ?? "");
+
+  // Panel renders highlighted HTML via innerHTML
+  const panel = div({ className: "zt-filetabs__panel" });
+  effect(() => {
+    const f = files.find((x) => x.path === active());
+    panel.innerHTML = f ? f.highlightedHtml : "";
+  });
 
   return div({ className: "zt-filetabs" },
     div({ className: "zt-filetabs__bar" },
@@ -177,14 +205,7 @@ function FileTabs() {
         (f) => f.path,
       ),
     ),
-    div({ className: "zt-filetabs__panel" },
-      pre(
-        code(() => {
-          const f = files.find((x) => x.path === active());
-          return f ? f.content : "";
-        }),
-      ),
-    ),
+    panel,
   );
 }
 
@@ -264,19 +285,19 @@ mount(FileTabs, document.getElementById("zt-source-mount"));
       .zt-filetabs__panel {
         overflow-x: auto;
       }
-      .zt-filetabs__panel pre {
+      /* Shiki generates <pre> with inline background — we just normalize layout */
+      .zt-filetabs__panel pre.shiki {
         margin: 0;
         padding: 20px;
-        background: #1e1e1e;
         border-radius: 0;
         border: none;
         min-height: 200px;
+        overflow-x: auto;
       }
-      .zt-filetabs__panel code {
+      .zt-filetabs__panel pre.shiki code {
         font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
         font-size: 13px;
         line-height: 1.6;
-        color: #d4d4d4;
         background: none;
         white-space: pre;
       }

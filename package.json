@@ -44,5 +44,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "shiki": "^4.0.2"
   }
 }
