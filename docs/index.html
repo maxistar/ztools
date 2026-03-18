@@ -7,8 +7,18 @@
   <style>
     body { font-family: Inter, system-ui, Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 16px; line-height: 1.6; }
     code, pre { background: #f6f8fa; border-radius: 6px; }
-    code { padding: 2px 6px; }
+    :not(pre) > code,
+    p code,
+    li code,
+    td code,
+    th code { padding: 2px 6px; }
     pre { padding: 12px; overflow-x: auto; }
+    pre > code {
+      padding: 0;
+      margin: 0;
+      display: block;
+      background: transparent;
+    }
     h1, h2 { line-height: 1.25; }
     .muted { color: #666; }
     .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin: 10px 0; }
