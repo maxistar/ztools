@@ -13,6 +13,9 @@ const examplesDir = path.join(buildDir, "examples");
 const demoPagesDir = path.join(buildDir, "demo");
 const demoDir = path.join(root, "demo");
 const runtimeFiles = ["ztools.js", "ztools.client.js", "ztools.ssr.js"];
+
+// Demos where source tabs make no sense (generated pages, build scripts, etc.)
+const NO_SOURCE_TABS = new Set(["ssr", "counter"]);
 const sourceOrder = [".js", ".mjs", ".html", ".css"];
 
 const {
@@ -216,12 +219,14 @@ mount(FileTabs, document.getElementById("zt-source-mount"));
           },
         }),
       ),
-      h2({ style: { marginTop: "40px" } }, "Source"),
-      div({ id: "zt-source-mount" }),
-      // data island
-      script({ type: "application/json", id: "zt-source-data" }, rawHtml(filesJson)),
-      // interactive tabs via ztools
-      script({ type: "module" }, rawHtml(inlineScript)),
+      ...(NO_SOURCE_TABS.has(example.name) ? [] : [
+        h2({ style: { marginTop: "40px" } }, "Source"),
+        div({ id: "zt-source-mount" }),
+        // data island
+        script({ type: "application/json", id: "zt-source-data" }, rawHtml(filesJson)),
+        // interactive tabs via ztools
+        script({ type: "module" }, rawHtml(inlineScript)),
+      ]),
     ],
     `
       .preview-card { margin-top: 24px; }
