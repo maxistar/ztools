@@ -3,7 +3,7 @@ import {
   tags as t,
   css,
   computed,
-} from "../../ztools.client.js";
+} from "../../dist/ztools.client.full.js";
 
 function normalizeHex(value) {
   if (!value) return "#000000";

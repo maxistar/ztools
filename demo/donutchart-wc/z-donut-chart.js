@@ -5,7 +5,7 @@ import {
     effect,
     tags as t,
     h
-} from "../../ztools.js";
+} from "../../dist/ztools.client.full.js";
 
 /* =========================
    SVG helpers

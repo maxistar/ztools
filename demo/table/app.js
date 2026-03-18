@@ -1,5 +1,5 @@
 
-import { signal, computed, effect, batch, enhance } from "../../ztools.js";
+import { signal, computed, effect, batch, enhance } from "../../dist/ztools.client.full.js";
 
 function normalize(s) {
   return String(s || "").toLowerCase();

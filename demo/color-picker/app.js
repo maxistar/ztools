@@ -6,7 +6,7 @@ import {
   For,
   mount,
   css,
-} from "../../ztools.client.js";
+} from "../../dist/ztools.client.full.js";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 

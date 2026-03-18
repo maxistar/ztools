@@ -1,4 +1,4 @@
-import { defineComponent, tags as t, signal, computed, effect, batch, css } from "../../ztools.client.js";
+import { defineComponent, tags as t, signal, computed, effect, batch, css } from "../../dist/ztools.client.full.js";
 
 const normalize = (s) => String(s || "").toLowerCase();
 const compare = (a, b) => a.localeCompare(b, undefined, { sensitivity: "base" });

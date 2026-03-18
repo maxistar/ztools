@@ -1,4 +1,4 @@
-import { h, signal, computed, mount, tags as t } from "../../ztools.js";
+import { h, signal, computed, mount, tags as t } from "../../dist/ztools.client.full.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 

@@ -2,7 +2,7 @@ import {
   signal,
   tags as t,
   mount,
-} from "../../ztools.client.js";
+} from "../../dist/ztools.client.full.js";
 import { ensureColorPickerWc, normalizeHex } from "./color-picker-wc.js";
 
 ensureColorPickerWc();

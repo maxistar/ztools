@@ -1,4 +1,4 @@
-import { signal, tags, mount, For } from "../../ztools.js";
+import { signal, tags, mount, For } from "../../dist/ztools.client.full.js";
 
 const { div, button, h1 } = tags;
 
