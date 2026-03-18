@@ -243,13 +243,8 @@ mount(FileTabs, document.getElementById("zt-source-mount"));
     [
       p(a({ href: "../index.html" }, "← Back to demos")),
       h1(example.name),
-      p(
-        "Live preview with source files. ",
-        a({ href: example.liveHref }, "Open raw demo ↗"),
-      ),
       div(
         { className: "preview-card" },
-        h2("Preview"),
         iframe({
           src: example.liveHref,
           title: `${example.name} live demo`,
@@ -269,6 +264,11 @@ mount(FileTabs, document.getElementById("zt-source-mount"));
       script({ type: "application/json", id: "zt-source-data" }, rawHtml(filesJson)),
       // interactive tabs via ztools
       script({ type: "module" }, rawHtml(inlineScript)),
+      p(
+        { style: { marginTop: "16px" } },
+        "Live preview with source files. ",
+        a({ href: example.liveHref }, "Open raw demo ↗"),
+      ),
     ],
     `
       .preview-card { margin-top: 24px; }
