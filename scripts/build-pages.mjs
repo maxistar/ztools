@@ -77,11 +77,23 @@ function shellPage(pageTitle, content, extraStyles = "") {
           a { color: #0b57d0; text-decoration: none; }
           a:hover { text-decoration: underline; }
           code, pre { background: #f6f8fa; border-radius: 8px; }
-          code { padding: 2px 6px; }
+          :not(pre) > code,
+          p code,
+          li code,
+          td code,
+          th code {
+            padding: 2px 6px;
+          }
           pre {
             padding: 16px;
             overflow-x: auto;
             border: 1px solid #e5e7eb;
+          }
+          pre > code {
+            padding: 0;
+            margin: 0;
+            display: block;
+            background: transparent;
           }
           ${extraStyles}
         `,
