@@ -18,6 +18,7 @@
     "ztools.ssr.js",
     "ztools.d.ts",
     "src",
+    "dist",
     "README.md"
   ],
   "scripts": {
@@ -25,6 +26,9 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "build:full:client": "esbuild ztools.client.js --bundle --format=esm --platform=browser --target=es2020 --outfile=dist/ztools.client.full.js",
+    "build:full:ssr": "esbuild ztools.ssr.js --bundle --format=esm --platform=node --target=node20 --outfile=dist/ztools.ssr.full.js",
+    "build:full": "npm run build:full:client && npm run build:full:ssr",
     "build:pages": "node ./scripts/build-pages.mjs",
     "generate:ssr-demo": "node ./demo/ssr/generate-ssr-page.mjs"
   },
@@ -37,6 +41,7 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "esbuild": "^0.27.4",
     "eslint": "^10.0.2",
     "globals": "^17.3.0",
     "jsdom": "^24.1.0",

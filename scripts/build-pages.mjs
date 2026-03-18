@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToString, tags, rawHtml } from "../ztools.ssr.js";
@@ -14,6 +14,10 @@ const examplesDir = path.join(buildDir, "examples");
 const demoPagesDir = path.join(buildDir, "demo");
 const demoDir = path.join(root, "demo");
 const runtimeFiles = ["ztools.js", "ztools.client.js", "ztools.ssr.js"];
+const optionalRuntimeFiles = [
+  "dist/ztools.client.full.js",
+  "dist/ztools.ssr.full.js",
+];
 
 const EXT_TO_LANG = {
   ".js": "javascript",
@@ -158,6 +162,16 @@ async function getExampleMetadata(name) {
 async function writePage(filePath, page) {
   await mkdir(path.dirname(filePath), { recursive: true });
   await writeFile(filePath, renderDocument(page), "utf8");
+}
+
+async function copyIfExists(fromAbs, toAbs) {
+  try {
+    await stat(fromAbs);
+    await mkdir(path.dirname(toAbs), { recursive: true });
+    await cp(fromAbs, toAbs);
+  } catch {
+    // optional file is absent — skip silently
+  }
 }
 
 function escapeJson(data) {
@@ -334,6 +348,10 @@ await mkdir(demoPagesDir, { recursive: true });
 
 for (const file of runtimeFiles) {
   await cp(path.join(root, file), path.join(buildDir, file));
+}
+
+for (const file of optionalRuntimeFiles) {
+  await copyIfExists(path.join(root, file), path.join(buildDir, file));
 }
 
 await rm(path.join(buildDir, "src"), { recursive: true, force: true });
