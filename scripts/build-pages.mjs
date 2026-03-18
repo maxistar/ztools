@@ -1,7 +1,7 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { renderToString, tags } from "../ztools.ssr.js";
+import { renderToString, tags, rawHtml } from "../ztools.ssr.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +22,7 @@ const {
   meta,
   title,
   style,
+  script,
   h1,
   h2,
   h3,
@@ -141,15 +142,63 @@ async function writePage(filePath, page) {
   await writeFile(filePath, renderDocument(page), "utf8");
 }
 
+function escapeJson(data) {
+  // Safe embed: escape </script> sequences inside JSON
+  return JSON.stringify(data).replace(/<\/script>/gi, "<\\/script>");
+}
+
 function renderWrapperPage(example) {
+  const filesJson = escapeJson(
+    example.sourceFiles.map((f) => ({ path: f.path, content: f.content })),
+  );
+
+  // Inline module script: mounts an interactive file-tabs viewer using ztools
+  const inlineScript = `
+import { signal, tags, mount, For } from "../../ztools.js";
+const { div, button, pre, code, span } = tags;
+
+const files = JSON.parse(document.getElementById("zt-source-data").textContent);
+
+function FileTabs() {
+  const active = signal(files[0]?.path ?? "");
+
+  return div({ className: "zt-filetabs" },
+    div({ className: "zt-filetabs__bar" },
+      For(
+        () => files,
+        (f) => button(
+          {
+            className: () =>
+              "zt-filetabs__tab" + (active() === f.path ? " active" : ""),
+            onClick: () => active.set(f.path),
+          },
+          f.path,
+        ),
+        (f) => f.path,
+      ),
+    ),
+    div({ className: "zt-filetabs__panel" },
+      pre(
+        code(() => {
+          const f = files.find((x) => x.path === active());
+          return f ? f.content : "";
+        }),
+      ),
+    ),
+  );
+}
+
+mount(FileTabs, document.getElementById("zt-source-mount"));
+`.trim();
+
   return shellPage(
     `${example.name} demo`,
     [
       p(a({ href: "../index.html" }, "← Back to demos")),
       h1(example.name),
       p(
-        "This page wraps the live example and shows the source files used to build it. ",
-        a({ href: example.liveHref }, "Open the raw live demo"),
+        "Live preview with source files. ",
+        a({ href: example.liveHref }, "Open raw demo ↗"),
       ),
       div(
         { className: "preview-card" },
@@ -167,32 +216,69 @@ function renderWrapperPage(example) {
           },
         }),
       ),
-      div(
-        { className: "source-list" },
-        h2("Source"),
-        ...example.sourceFiles.map((file) =>
-          div(
-            { className: "source-card" },
-            h3(file.path),
-            pre(code(file.content)),
-          ),
-        ),
-      ),
+      h2({ style: { marginTop: "40px" } }, "Source"),
+      div({ id: "zt-source-mount" }),
+      // data island
+      script({ type: "application/json", id: "zt-source-data" }, rawHtml(filesJson)),
+      // interactive tabs via ztools
+      script({ type: "module" }, rawHtml(inlineScript)),
     ],
     `
-      .preview-card,
-      .source-card {
-        margin-top: 24px;
+      .preview-card { margin-top: 24px; }
+      h2 { margin-bottom: 12px; }
+      iframe { margin-top: 8px; }
+
+      /* ── file tabs ─────────────────────────────── */
+      .zt-filetabs {
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #1e1e1e;
       }
-      .source-list {
-        margin-top: 32px;
+      .zt-filetabs__bar {
+        display: flex;
+        background: #2d2d2d;
+        border-bottom: 1px solid #3c3c3c;
+        overflow-x: auto;
+        scrollbar-width: none;
       }
-      h3 {
-        margin-bottom: 10px;
-        font-size: 16px;
+      .zt-filetabs__bar::-webkit-scrollbar { display: none; }
+      .zt-filetabs__tab {
+        padding: 8px 18px;
+        font-size: 13px;
+        font-family: inherit;
+        color: #aaa;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: color .15s, border-color .15s, background .15s;
       }
-      iframe {
-        margin-top: 8px;
+      .zt-filetabs__tab:hover { color: #ddd; background: #3a3a3a; }
+      .zt-filetabs__tab.active {
+        color: #fff;
+        border-bottom-color: #4d9aff;
+        background: #1e1e1e;
+      }
+      .zt-filetabs__panel {
+        overflow-x: auto;
+      }
+      .zt-filetabs__panel pre {
+        margin: 0;
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 0;
+        border: none;
+        min-height: 200px;
+      }
+      .zt-filetabs__panel code {
+        font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        color: #d4d4d4;
+        background: none;
+        white-space: pre;
       }
     `,
   );

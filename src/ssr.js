@@ -33,11 +33,20 @@ export const tags = new Proxy(
   },
 );
 
+/**
+ * rawHtml(content) — embed raw HTML without escaping.
+ * Use only for trusted content (script/style bodies etc.)
+ */
+export function rawHtml(content) {
+  return { __rawHtml: true, content: String(content) };
+}
+
 export function renderToString(node) {
   return render(node);
 
   function render(n) {
     if (n == null || n === false) return "";
+    if (n && n.__rawHtml) return n.content;
     if (typeof n === "string" || typeof n === "number") return escText(String(n));
     if (Array.isArray(n)) return n.map(render).join("");
 
