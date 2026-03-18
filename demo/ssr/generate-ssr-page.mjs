@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToString, tags } from "../../ztools.ssr.js";
@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const outputPath = path.join(__dirname, "index.html");
 
-const { html, head, body, meta, title, style, h1, h2, p, section, table, thead, tbody, tr, th, td, form, label, input, button, ul, li, pre, code } = tags;
+const { html, head, body, meta, title, style, h1, h2, p, section, table, thead, tbody, tr, th, td, form, label, input, button, ul, li } = tags;
 
 const tableRows = [
   {
@@ -32,8 +32,6 @@ const listItems = [
   "Generate demo/ssr/index.html on the server in CI",
   "Publish static artifacts to GitHub Pages",
 ];
-
-const codeExample = await readFile(__filename, "utf8");
 
 function renderPage() {
   const page = html(
@@ -84,8 +82,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monos
           button({ type: "submit" }, "Submit")
         )
       ),
-      section(h2("Marked List"), ul(...listItems.map((item) => li(item)))),
-      section(h2("Code Used to Generate This Page"), pre(code(codeExample)))
+      section(h2("Marked List"), ul(...listItems.map((item) => li(item))))
     )
   );
 
