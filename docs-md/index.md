@@ -34,9 +34,9 @@ Copy this into `index.html` and open it in a browser:
     <div id="app"></div>
 
     <script type="module">
-      import { signal, computed, createTags, mount } from "https://ztools.org/dist/ztools.client.full.js";
+      import { signal, computed, tags, mount } from "https://ztools.org/dist/ztools.client.full.js";
 
-      const [div, p, button] = createTags("div", "p", "button");
+      const { div, p, button } = tags;
 
       function App() {
         const count = signal(0);
@@ -59,7 +59,7 @@ For a full project setup walkthrough, see [Getting Started](./getting-started.ht
 ## API
 
 - `signal`, `effect`, `computed`, `batch`, `onCleanup`
-- `h`, `tag`, `createTags`, `tags`
+- `h`, `tag`, `tags` (plus `createTags` when you prefer explicit tag lists)
 - `Show` (alias: `If`), `For`
 - `mount`, `enhance`
 

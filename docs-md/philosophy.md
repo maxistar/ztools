@@ -3,9 +3,9 @@
 What ztools is trying to optimize for.
 
 ```js
-import { signal, createTags, mount } from "@ztools.org/runtime";
+import { signal, tags, mount } from "@ztools.org/runtime";
 
-const [div, button] = createTags("div", "button");
+const { div, button } = tags;
 
 function App() {
   const count = signal(0);

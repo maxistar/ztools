@@ -18,9 +18,9 @@ Mounts a component into a DOM root.
 Returns a dispose function.
 
 ```js
-import { signal, createTags, mount } from "@ztools.org/runtime";
+import { signal, tags, mount } from "@ztools.org/runtime";
 
-const [div, button] = createTags("div", "button");
+const { div, button } = tags;
 
 function App() {
   const n = signal(0);

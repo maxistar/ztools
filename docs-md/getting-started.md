@@ -14,9 +14,9 @@ npm install @ztools.org/runtime
 ## 2) Replace `main.js` with a simple app
 
 ```js
-import { signal, computed, createTags, mount } from "@ztools.org/runtime";
+import { signal, computed, tags, mount } from "@ztools.org/runtime";
 
-const [div, p, button] = createTags("div", "p", "button");
+const { div, p, button } = tags;
 
 function App() {
   const count = signal(0);
