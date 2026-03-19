@@ -43,6 +43,29 @@ Enhances already existing DOM nodes (SSR/static HTML upgrade scenario).
 
 Use this when HTML is pre-rendered and you want to attach behavior/reactivity without full rerender.
 
+```html
+<div id="counter-basic">
+  <button id="inc">+1</button>
+  <strong id="value">0</strong>
+</div>
+```
+
+```js
+import { signal, effect, enhance } from "@ztools.org/runtime";
+
+enhance(document.getElementById("counter-basic"), (root) => {
+  const valueEl = root.querySelector("#value");
+  const incBtn = root.querySelector("#inc");
+  const count = signal(Number(valueEl.textContent || 0));
+
+  incBtn.addEventListener("click", () => count.set(count() + 1));
+
+  effect(() => {
+    valueEl.textContent = String(count());
+  });
+});
+```
+
 ## `enhanceWithRefs(root, fn)`
 
 Like `enhance`, but also collects `[data-ref]` nodes and passes them to setup as `{ refs }`.
