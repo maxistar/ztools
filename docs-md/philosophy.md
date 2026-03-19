@@ -2,6 +2,23 @@
 
 What ztools is trying to optimize for.
 
+```js
+import { signal, createTags, mount } from "@ztools.org/runtime";
+
+const [div, button] = createTags("div", "button");
+
+function App() {
+  const count = signal(0);
+
+  return div(
+    div(() => `Count: ${count()}`),
+    button({ onClick: () => count.set(count() + 1) }, "+1")
+  );
+}
+
+mount(App, document.body);
+```
+
 ## 1) Reactivity should not be hard
 
 We believe reactivity should be approachable. If a framework requires weeks of study before you can build simple interfaces, it may be solving the wrong problem for many teams.
