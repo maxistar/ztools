@@ -10,10 +10,13 @@
   <nav class="nav"><a href="./index.html">Docs Home</a><a href="./philosophy.html">Philosophy</a><a href="./getting-started.html"><strong>Getting Started</strong></a><a href="./api.html">API</a><a href="./demo/">Examples</a></nav>
   <h1>Getting Started</h1>
 <p>A 5-minute path to your first reactive UI with ztools.</p>
-<h2>1) Install</h2>
-<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> @ztools.org/runtime</span></span>
+<h2>1) Create a Vite project</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> vite@latest</span><span style="color:#9ECBFF"> my-ztools-app</span><span style="color:#79B8FF"> --</span><span style="color:#79B8FF"> --template</span><span style="color:#9ECBFF"> vanilla</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> my-ztools-app</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> @ztools.org/runtime</span></span>
 <span class="line"></span></code></pre>
-<h2>2) Create a simple app</h2>
+<h2>2) Replace <code>main.js</code> with a simple app</h2>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { signal, computed, createTags, mount } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">div</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">p</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">button</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> createTags</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"p"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"button"</span><span style="color:#E1E4E8">);</span></span>
@@ -30,14 +33,18 @@
 <span class="line"></span>
 <span class="line"><span style="color:#B392F0">mount</span><span style="color:#E1E4E8">(App, document.</span><span style="color:#B392F0">getElementById</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"app"</span><span style="color:#E1E4E8">));</span></span>
 <span class="line"></span></code></pre>
-<h2>3) Understand the core idea</h2>
+<h2>3) Run the project</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> dev</span></span>
+<span class="line"></span></code></pre>
+<p>Then open the local URL shown by Vite (usually <code>http://localhost:5173</code>).</p>
+<h2>4) Understand the core idea</h2>
 <ul>
 <li><code>signal()</code> stores reactive state</li>
 <li><code>computed()</code> derives values from signals</li>
 <li>Functions in children/props (e.g. <code>() =&gt; count()</code>) re-render reactively</li>
 <li><code>mount()</code> renders your component into the DOM</li>
 </ul>
-<h2>4) Next steps</h2>
+<h2>5) Next steps</h2>
 <ul>
 <li>Read <a href="./philosophy.html">Philosophy</a></li>
 <li>Open <a href="./demo/">Examples</a> and inspect source code</li>
