@@ -17,11 +17,53 @@ Use `enhance.js` when you already have DOM (SSR/static/server-rendered) and want
 Mounts a component into a DOM root.
 Returns a dispose function.
 
+```js
+import { signal, createTags, mount } from "@ztools.org/runtime";
+
+const [div, button] = createTags("div", "button");
+
+function App() {
+  const n = signal(0);
+  return div(
+    button({ onClick: () => n.set(n() + 1) }, "+1"),
+    div(() => `Count: ${n()}`)
+  );
+}
+
+const root = document.getElementById("app");
+const dispose = mount(App, root);
+
+// later
+// dispose();
+```
+
 ## `enhance(root, fn)`
 
 Enhances already existing DOM nodes (SSR/static HTML upgrade scenario).
 
 Use this when HTML is pre-rendered and you want to attach behavior/reactivity without full rerender.
+
+```html
+<div id="counter">
+  <button id="inc">+1</button>
+  <strong id="value">0</strong>
+</div>
+```
+
+```js
+import { signal, effect, enhance } from "@ztools.org/runtime";
+
+enhance(document.getElementById("counter"), (root) => {
+  const valueEl = root.querySelector("#value");
+  const incBtn = root.querySelector("#inc");
+  const count = signal(Number(valueEl.textContent || 0));
+
+  incBtn.addEventListener("click", () => count.set(count() + 1));
+  effect(() => {
+    valueEl.textContent = String(count());
+  });
+});
+```
 
 ## Related APIs
 
