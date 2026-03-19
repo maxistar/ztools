@@ -5,7 +5,7 @@ Progressive enhancement helpers.
 ## Import example
 
 ```js
-import { mount, enhance, enhanceWithRefs } from "@ztools.org/runtime";
+import { mount, enhance } from "@ztools.org/runtime";
 ```
 
 ## When to use
@@ -47,31 +47,31 @@ Use this when HTML is pre-rendered and you want to attach behavior/reactivity wi
 
 ```html
 <div id="counter-basic">
-  <button id="inc">+1</button>
-  <strong id="value">0</strong>
+  <button data-ref="dec">-1</button>
+  <strong data-ref="value">0</strong>
+  <button data-ref="inc">+1</button>
 </div>
 ```
 
 ```js
 import { signal, effect, enhance } from "@ztools.org/runtime";
 
-enhance(document.getElementById("counter-basic"), ({ root }) => {
-  const valueEl = root.querySelector("#value");
-  const incBtn = root.querySelector("#inc");
-  const count = signal(Number(valueEl.textContent || 0));
+enhance(document.getElementById("counter-basic"), ({ refs }) => {
+  const count = signal(Number(refs.value.textContent || 0));
 
-  incBtn.addEventListener("click", () => count.set(count() + 1));
+  refs.inc.addEventListener("click", () => count.set(count() + 1));
+  refs.dec.addEventListener("click", () => count.set(count() - 1));
 
   effect(() => {
-    valueEl.textContent = String(count());
+    refs.value.textContent = String(count());
   });
 });
 ```
 
 ## `enhanceWithRefs(root, fn)`
 
-Alias for `enhance(root, fn)`.
-Use it if you prefer explicit naming for refs-based enhancement.
+Legacy alias for `enhance(root, fn)`.
+Prefer `enhance` in new code.
 If multiple elements share the same `data-ref`, `refs[name]` becomes an array.
 
 ```html
