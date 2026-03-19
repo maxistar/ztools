@@ -1,4 +1,4 @@
-import { signal, computed, effect, batch, enhance } from "../../dist/ztools.client.full.js";
+import { signal, computed, effect, batch, enhanceWithRefs } from "../../dist/ztools.client.full.js";
 
 function normalize(s) {
   return String(s || "").toLowerCase();
@@ -6,31 +6,6 @@ function normalize(s) {
 
 function compare(a, b) {
   return a.localeCompare(b, undefined, { sensitivity: "base" });
-}
-
-function collectRefs(root) {
-  const out = {};
-  const all = root.querySelectorAll("[data-ref]");
-
-  for (const el of all) {
-    const name = el.getAttribute("data-ref");
-    if (!name) continue;
-
-    if (out[name] == null) {
-      out[name] = el;
-    } else if (Array.isArray(out[name])) {
-      out[name].push(el);
-    } else {
-      out[name] = [out[name], el];
-    }
-  }
-
-  return out;
-}
-
-function enhanceWithRefs(root, setup) {
-  const refs = collectRefs(root);
-  return enhance(root, () => setup({ refs }));
 }
 
 const root = document.getElementById("contacts-app");

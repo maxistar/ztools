@@ -12,11 +12,12 @@
 <h2>Exports (auto)</h2>
 <ul>
 <li><code>enhance(root, setup)</code></li>
+<li><code>enhanceWithRefs(root, setup)</code></li>
 <li><code>mount(Component, container)</code></li>
 </ul>
 <p>Progressive enhancement helpers.</p>
 <h2>Import example</h2>
-<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { mount, enhance } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { mount, enhance, enhanceWithRefs } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span></code></pre>
 <h2>When to use</h2>
 <p>Use <code>enhance.js</code> when you already have DOM (SSR/static/server-rendered) and want to attach behavior without rebuilding markup.</p>
@@ -44,6 +45,9 @@ Returns a dispose function.</p>
 <h2><code>enhance(root, fn)</code></h2>
 <p>Enhances already existing DOM nodes (SSR/static HTML upgrade scenario).</p>
 <p>Use this when HTML is pre-rendered and you want to attach behavior/reactivity without full rerender.</p>
+<h2><code>enhanceWithRefs(root, fn)</code></h2>
+<p>Like <code>enhance</code>, but also collects <code>[data-ref]</code> nodes and passes them to setup as <code>{ refs }</code>.
+If multiple elements share the same <code>data-ref</code>, <code>refs[name]</code> becomes an array.</p>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"counter"</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"inc"</span><span style="color:#E1E4E8">>+1&#x3C;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">strong</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"value"</span><span style="color:#E1E4E8">>0&#x3C;/</span><span style="color:#85E89D">strong</span><span style="color:#E1E4E8">></span></span>

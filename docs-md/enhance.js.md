@@ -5,7 +5,7 @@ Progressive enhancement helpers.
 ## Import example
 
 ```js
-import { mount, enhance } from "@ztools.org/runtime";
+import { mount, enhance, enhanceWithRefs } from "@ztools.org/runtime";
 ```
 
 ## When to use
@@ -42,6 +42,11 @@ const dispose = mount(App, root);
 Enhances already existing DOM nodes (SSR/static HTML upgrade scenario).
 
 Use this when HTML is pre-rendered and you want to attach behavior/reactivity without full rerender.
+
+## `enhanceWithRefs(root, fn)`
+
+Like `enhance`, but also collects `[data-ref]` nodes and passes them to setup as `{ refs }`.
+If multiple elements share the same `data-ref`, `refs[name]` becomes an array.
 
 ```html
 <div id="counter">
