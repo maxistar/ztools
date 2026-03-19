@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { signal, computed, effect, batch, createTags, tags, For, Show, mount } from '../ztools.js';
+import { signal, computed, effect, batch, createTags, tags, For, Show, mount, enhance, enhanceWithRefs } from '../ztools.js';
 
 describe('reactive core', () => {
   it('signal/effect reacts to set', () => {
@@ -232,5 +232,36 @@ describe('dom helpers', () => {
     expect(node.className).toBe('box');
     expect(node.querySelector('a')?.getAttribute('href')).toBe('#ok');
     expect(node.textContent).toBe('Open');
+  });
+
+  it('enhance provides refs and enhanceWithRefs is an alias', () => {
+    const root = document.createElement('div');
+    root.innerHTML = `
+      <button data-ref="btn">+</button>
+      <span data-ref="value">0</span>
+      <i data-ref="item"></i>
+      <i data-ref="item"></i>
+    `;
+    document.body.appendChild(root);
+
+    let fromEnhance;
+    const disposeA = enhance(root, ({ refs }) => {
+      fromEnhance = refs;
+    });
+
+    expect(fromEnhance.btn).toBeInstanceOf(Element);
+    expect(fromEnhance.value).toBeInstanceOf(Element);
+    expect(Array.isArray(fromEnhance.item)).toBe(true);
+    expect(fromEnhance.item.length).toBe(2);
+
+    let aliasWorked = false;
+    const disposeB = enhanceWithRefs(root, ({ refs }) => {
+      aliasWorked = !!refs.btn;
+    });
+
+    expect(aliasWorked).toBe(true);
+
+    disposeA();
+    disposeB();
   });
 });

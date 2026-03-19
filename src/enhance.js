@@ -9,12 +9,13 @@ export function enhance(root, setup) {
   if (!root) throw new Error("enhance(root, setup): root is required");
   if (typeof setup !== "function") throw new Error("enhance(root, setup): setup must be a function");
 
+  const refs = collectRefs(root);
   const owner = __createOwner(null);
 
   const prevOwner = __getActiveOwner();
   __setActiveOwner(owner);
   try {
-    setup(root);
+    setup({ root, refs });
   } finally {
     __setActiveOwner(prevOwner);
   }
@@ -33,33 +34,36 @@ export function enhance(root, setup) {
   };
 }
 
+function addRef(refs, name, el) {
+  if (refs[name] == null) {
+    refs[name] = el;
+  } else if (Array.isArray(refs[name])) {
+    refs[name].push(el);
+  } else {
+    refs[name] = [refs[name], el];
+  }
+}
+
 function collectRefs(root) {
   const refs = Object.create(null);
+
+  if (root.hasAttribute && root.hasAttribute("data-ref")) {
+    const n = root.getAttribute("data-ref");
+    if (n) addRef(refs, n, root);
+  }
+
   const all = root.querySelectorAll("[data-ref]");
 
   for (const el of all) {
     const name = el.getAttribute("data-ref");
     if (!name) continue;
-
-    if (refs[name] == null) {
-      refs[name] = el;
-    } else if (Array.isArray(refs[name])) {
-      refs[name].push(el);
-    } else {
-      refs[name] = [refs[name], el];
-    }
+    addRef(refs, name, el);
   }
 
   return refs;
 }
 
-export function enhanceWithRefs(root, setup) {
-  if (!root) throw new Error("enhanceWithRefs(root, setup): root is required");
-  if (typeof setup !== "function") throw new Error("enhanceWithRefs(root, setup): setup must be a function");
-
-  const refs = collectRefs(root);
-  return enhance(root, () => setup({ root, refs }));
-}
+export const enhanceWithRefs = enhance;
 
 export function mount(Component, container) {
   if (!container) throw new Error("mount(Component, container): container is required");
@@ -71,7 +75,7 @@ export function mount(Component, container) {
     container.__ztoolsDispose = null;
   }
 
-  const ownerDispose = enhance(container, (root) => {
+  const ownerDispose = enhance(container, ({ root }) => {
     const node = Component();
     if (!(node instanceof Node)) throw new Error("mount(): Component must return a DOM Node");
 

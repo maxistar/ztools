@@ -12,7 +12,7 @@
 <h2>Exports (auto)</h2>
 <ul>
 <li><code>enhance(root, setup)</code></li>
-<li><code>enhanceWithRefs(root, setup)</code></li>
+<li><code>enhanceWithRefs</code></li>
 <li><code>mount(Component, container)</code></li>
 </ul>
 <p>Progressive enhancement helpers.</p>
@@ -45,6 +45,7 @@ Returns a dispose function.</p>
 <h2><code>enhance(root, fn)</code></h2>
 <p>Enhances already existing DOM nodes (SSR/static HTML upgrade scenario).</p>
 <p>Use this when HTML is pre-rendered and you want to attach behavior/reactivity without full rerender.</p>
+<p><code>fn</code> receives <code>{ root, refs }</code>, where <code>refs</code> are collected from <code>[data-ref]</code> nodes.</p>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"counter-basic"</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"inc"</span><span style="color:#E1E4E8">>+1&#x3C;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">strong</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"value"</span><span style="color:#E1E4E8">>0&#x3C;/</span><span style="color:#85E89D">strong</span><span style="color:#E1E4E8">></span></span>
@@ -52,7 +53,7 @@ Returns a dispose function.</p>
 <span class="line"></span></code></pre>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { signal, effect, enhance } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#B392F0">enhance</span><span style="color:#E1E4E8">(document.</span><span style="color:#B392F0">getElementById</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"counter-basic"</span><span style="color:#E1E4E8">), (</span><span style="color:#FFAB70">root</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">enhance</span><span style="color:#E1E4E8">(document.</span><span style="color:#B392F0">getElementById</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"counter-basic"</span><span style="color:#E1E4E8">), ({ </span><span style="color:#FFAB70">root</span><span style="color:#E1E4E8"> }) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> valueEl</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> root.</span><span style="color:#B392F0">querySelector</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"#value"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> incBtn</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> root.</span><span style="color:#B392F0">querySelector</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"#inc"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> count</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Number</span><span style="color:#E1E4E8">(valueEl.textContent </span><span style="color:#F97583">||</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">));</span></span>
@@ -65,7 +66,8 @@ Returns a dispose function.</p>
 <span class="line"><span style="color:#E1E4E8">});</span></span>
 <span class="line"></span></code></pre>
 <h2><code>enhanceWithRefs(root, fn)</code></h2>
-<p>Like <code>enhance</code>, but also collects <code>[data-ref]</code> nodes and passes them to setup as <code>{ refs }</code>.
+<p>Alias for <code>enhance(root, fn)</code>.
+Use it if you prefer explicit naming for refs-based enhancement.
 If multiple elements share the same <code>data-ref</code>, <code>refs[name]</code> becomes an array.</p>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">div</span><span style="color:#B392F0"> id</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"counter"</span><span style="color:#B392F0"> data-ref</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"root"</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">button</span><span style="color:#B392F0"> data-ref</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"inc"</span><span style="color:#E1E4E8">>+1&#x3C;/</span><span style="color:#85E89D">button</span><span style="color:#E1E4E8">></span></span>

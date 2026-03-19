@@ -134,10 +134,19 @@ export declare function For<T>(
   keyFn?: (item: T, idx: number) => string | number
 ): HTMLSpanElement;
 
+export interface EnhanceContext {
+  root: Element;
+  refs: {
+    [name: string]: Element | Element[];
+  };
+}
+
 export declare function enhance(
   root: Element,
-  setup: (root: Element) => void
+  setup: (ctx: EnhanceContext) => void
 ): () => void;
+
+export declare const enhanceWithRefs: typeof enhance;
 
 export declare function mount(
   Component: () => Node,

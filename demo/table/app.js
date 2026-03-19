@@ -10,7 +10,7 @@ function compare(a, b) {
   return a.localeCompare(b, undefined, { sensitivity: "base" });
 }
 
-enhance(document.getElementById("app"), (root) => {
+enhance(document.getElementById("app"), ({ root }) => {
   const input = root.querySelector("#q");
   const shownEl = root.querySelector("#shown");
   const table = root.querySelector("#contacts");
