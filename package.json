@@ -1,6 +1,6 @@
 {
   "name": "@ztools.org/runtime",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Tiny DOM-first reactive UI runtime",
   "type": "module",
   "main": "./ztools.js",
@@ -63,12 +63,10 @@
     "globals": "^17.3.0",
     "jsdom": "^24.1.0",
     "markdown-it": "^14.1.1",
-    "vitest": "^2.0.5"
+    "vitest": "^2.0.5",
+    "shiki": "^4.0.2"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "shiki": "^4.0.2"
   }
 }
