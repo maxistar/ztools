@@ -33,5 +33,6 @@ ztools intentionally focuses on a small API surface: signals, effects, and strai
 
 ## See more
 
+- [Getting Started](./getting-started.html)
 - [API](./api.html)
 - [Examples](./demo/)
