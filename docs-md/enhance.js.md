@@ -65,6 +65,11 @@ enhance(document.getElementById("counter"), (root) => {
 });
 ```
 
+## Examples
+
+- [SSR counter with refs](./demo/ssr-counter-refs/)
+- [SSR table + refs + sorting/filtering](./demo/enhance-refs/)
+
 ## Related APIs
 
 - [`dom.js`](./dom.js.html)
