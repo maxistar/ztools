@@ -13,15 +13,18 @@
 <ul>
 <li><code>css(strings, ...values)</code></li>
 </ul>
-<p>Tiny helper for css template literals.</p>
+<p>Optional helper for CSS template literals.</p>
 <h2>Import example</h2>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { css } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/ztools.client.js"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span></code></pre>
 <h2>When to use</h2>
-<p>Use <code>css</code> when composing style text in component files (especially together with <code>t.style(...)</code>).</p>
+<p>Use <code>css</code> only as optional sugar when composing style text in component files.
+In most cases, plain template strings are enough.</p>
 <h2><code>css\</code>…``</h2>
-<p>Concatenates template strings/values into one CSS string.
-Often used with <code>t.style(css\</code>…`)` in components.</p>
+<p>Concatenates template strings/values into one CSS string.</p>
+<blockquote>
+<p>Note: this is mostly equivalent to a plain template string. It exists as optional semantic sugar and future extension point.</p>
+</blockquote>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> base</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "#0b57d0"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> styles</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> css</span><span style="color:#9ECBFF">`</span></span>

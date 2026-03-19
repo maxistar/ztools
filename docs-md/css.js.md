@@ -1,6 +1,6 @@
 # css.js
 
-Tiny helper for css template literals.
+Optional helper for CSS template literals.
 
 ## Import example
 
@@ -10,12 +10,14 @@ import { css } from "@ztools.org/runtime/ztools.client.js";
 
 ## When to use
 
-Use `css` when composing style text in component files (especially together with `t.style(...)`).
+Use `css` only as optional sugar when composing style text in component files.
+In most cases, plain template strings are enough.
 
 ## `css\`...\``
 
 Concatenates template strings/values into one CSS string.
-Often used with `t.style(css\`...\`)` in components.
+
+> Note: this is mostly equivalent to a plain template string. It exists as optional semantic sugar and future extension point.
 
 ```js
 const base = "#0b57d0";

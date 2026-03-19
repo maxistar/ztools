@@ -12,7 +12,7 @@ API entry page for sub-pages.
 
 - [`ssr.js`](./ssr.js.html) — server-side rendering helpers (`h`, `tags`, `renderToString`, `rawHtml`)
 - [`wc.js`](./wc.js.html) — Web Components adapter (`defineComponent`)
-- [`css.js`](./css.js.html) — small css template helper
+- [`css.js`](./css.js.html) — optional css template helper
 
 ## Entry points
 
