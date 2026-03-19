@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SSR refs demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 20px; }
+    #counter-app { max-width: 560px; margin: 0 auto; }
+    button { padding: 8px 12px; margin-right: 8px; }
+  </style>
+</head>
+<body>
+  <div id="counter-app">
+    <h1>SSR counter</h1>
+    <p>
+      Count: <strong data-ref="value">3</strong>
+    </p>
+    <div>
+      <button data-ref="dec" type="button">-1</button>
+      <button data-ref="inc" type="button">+1</button>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
