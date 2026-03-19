@@ -4,6 +4,8 @@
 
 DOM-first. AI-ready. No framework.
 
+See also: [Philosophy](./philosophy.html)
+
 ## Features
 
 - Fine-grained reactivity with `signal`, `computed`, `effect`, and `batch`
