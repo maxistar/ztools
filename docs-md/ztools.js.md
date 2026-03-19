@@ -17,6 +17,12 @@ Re-exports:
 - `./src/dom.js`
 - `./src/enhance.js`
 
+## Examples
+
+- [Counter](./demo/counter/)
+- [Styles](./demo/styles/)
+- [Tabs](./demo/tabs/)
+
 ## Related APIs
 
 - [`core.js`](./core.js.html)

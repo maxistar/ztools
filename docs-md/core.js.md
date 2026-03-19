@@ -89,6 +89,12 @@ effect(() => {
 enabled.set(false); // interval is cleaned up
 ```
 
+## Examples
+
+- [Counter](./demo/counter/)
+- [For + If table toggle](./demo/for-if/)
+- [Todo list](./demo/todo/)
+
 ## Related APIs
 
 - [`dom.js`](./dom.js.html)

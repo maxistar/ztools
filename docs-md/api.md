@@ -19,3 +19,8 @@ API entry page for sub-pages.
 - [`ztools.js`](./ztools.js.html) — default exports
 - [`ztools.client.js`](./ztools.client.js.html) — client-oriented entry
 - [`ztools.ssr.js`](./ztools.ssr.js.html) — SSR-only entry
+
+## Example collections
+
+- [All interactive demo wrappers](./demo/)
+- [Raw example routes](./examples/)

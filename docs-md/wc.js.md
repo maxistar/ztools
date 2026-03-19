@@ -74,6 +74,12 @@ document.querySelector("x-counter")
   });
 ```
 
+## Examples
+
+- [Contacts table Web Component](./demo/contacts-table/)
+- [Donut chart Web Component](./demo/donutchart-wc/)
+- [Color picker component demo](./demo/color-picker/)
+
 ## Related APIs
 
 - [`dom.js`](./dom.js.html)

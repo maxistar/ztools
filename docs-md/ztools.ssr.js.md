@@ -20,6 +20,12 @@ Use this on Node/server build steps to generate HTML with:
 - `renderToString`
 - `rawHtml`
 
+## Examples
+
+- [SSR page demo](./demo/ssr/)
+- [SSR counter refs](./demo/ssr-counter-refs/)
+- [Enhance refs table](./demo/enhance-refs/)
+
 ## Related APIs
 
 - [`ssr.js`](./ssr.js.html)

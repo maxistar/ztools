@@ -96,6 +96,13 @@ const listNode = For(
 ```
 
 
+## Examples
+
+- [DOM-first table](./demo/table/)
+- [For + If](./demo/for-if/)
+- [Tabs](./demo/tabs/)
+- [Todo list](./demo/todo/)
+
 ## Related APIs
 
 - [`core.js`](./core.js.html)

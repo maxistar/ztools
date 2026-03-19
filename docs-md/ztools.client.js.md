@@ -19,6 +19,12 @@ Re-exports:
 - `enhance.js`
 - `wc.js`
 
+## Examples
+
+- [Contacts table (wc + css)](./demo/contacts-table/)
+- [Donut chart Web Component](./demo/donutchart-wc/)
+- [SSR counter refs (enhance)](./demo/ssr-counter-refs/)
+
 ## Related APIs
 
 - [`core.js`](./core.js.html)

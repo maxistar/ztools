@@ -57,6 +57,12 @@ const page = h("div", null,
 ```
 
 
+## Examples
+
+- [SSR page demo](./demo/ssr/)
+- [SSR counter → enhance](./demo/ssr-counter-refs/)
+- [SSR table → enhance with refs](./demo/enhance-refs/)
+
 ## Related APIs
 
 - [`core.js`](./core.js.html)

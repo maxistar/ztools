@@ -45,6 +45,12 @@ const node = t.div(
 );
 ```
 
+## Examples
+
+- [Contacts table Web Component](./demo/contacts-table/)
+- [Color picker](./demo/color-picker/)
+- [Sketch](./demo/sketch/)
+
 ## Related APIs
 
 - [`wc.js`](./wc.js.html)
