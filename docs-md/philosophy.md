@@ -13,3 +13,8 @@ The core idea behind ztools is that a developer should be able to understand the
 ## 3) Simple primitives, practical results
 
 ztools intentionally focuses on a small API surface: signals, effects, and straightforward DOM helpers. Small building blocks are easier to reason about, test, and maintain.
+
+## See more
+
+- [API](./api.html)
+- [Examples](./demo/)
