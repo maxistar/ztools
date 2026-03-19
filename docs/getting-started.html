@@ -4,88 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ztools getting started</title>
-  <style>
-    body {
-      font-family: Inter, system-ui, Arial, sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 16px;
-      line-height: 1.7;
-    }
-    h1, h2 { line-height: 1.25; }
-    code, pre { background: #f6f8fa; border-radius: 6px; }
-    code { padding: 2px 6px; }
-    pre { padding: 12px; overflow-x: auto; }
-    .muted { color: #666; }
-    .card {
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 14px;
-      margin: 10px 0;
-    }
-    a { color: #0b57d0; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .nav {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-  </style>
+  <link rel="stylesheet" href="./styles/docs.css" />
 </head>
 <body>
-  <nav class="nav">
-    <a href="./index.html">Docs Home</a>
-    <a href="./philosophy.html">Philosophy</a>
-    <a href="./getting-started.html"><strong>Getting Started</strong></a>
-    <a href="./examples/">Examples</a>
-  </nav>
-
+  <nav class="nav"><a href="./index.html">Docs Home</a><a href="./philosophy.html">Philosophy</a><a href="./getting-started.html"><strong>Getting Started</strong></a><a href="./api.html">API</a><a href="./demo/">Examples</a></nav>
   <h1>Getting Started</h1>
-  <p class="muted">A 5-minute path to your first reactive UI with ztools.</p>
+<p>A 5-minute path to your first reactive UI with ztools.</p>
+<h2>1) Create a Vite project</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> vite@latest</span><span style="color:#9ECBFF"> my-ztools-app</span><span style="color:#79B8FF"> --</span><span style="color:#79B8FF"> --template</span><span style="color:#9ECBFF"> vanilla</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> my-ztools-app</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> @ztools.org/runtime</span></span>
+<span class="line"></span></code></pre>
+<h2>2) Replace <code>main.js</code> with a simple app</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { signal, computed, createTags, mount } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">div</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">p</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">button</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> createTags</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"p"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"button"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> App</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> count</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> doubled</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> computed</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#B392F0"> count</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    p</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"count: "</span><span style="color:#E1E4E8">, () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> count</span><span style="color:#E1E4E8">(), </span><span style="color:#9ECBFF">" | doubled: "</span><span style="color:#E1E4E8">, () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> doubled</span><span style="color:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#B392F0">    button</span><span style="color:#E1E4E8">({ </span><span style="color:#B392F0">onClick</span><span style="color:#E1E4E8">: () </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> count.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">count</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) }, </span><span style="color:#9ECBFF">"Increment"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">mount</span><span style="color:#E1E4E8">(App, document.</span><span style="color:#B392F0">getElementById</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"app"</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"></span></code></pre>
+<h2>3) Run the project</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> dev</span></span>
+<span class="line"></span></code></pre>
+<p>Then open the local URL shown by Vite (usually <code>http://localhost:5173</code>).</p>
+<h2>4) Understand the core idea</h2>
+<ul>
+<li><code>signal()</code> stores reactive state</li>
+<li><code>computed()</code> derives values from signals</li>
+<li>Functions in children/props (e.g. <code>() =&gt; count()</code>) re-render reactively</li>
+<li><code>mount()</code> renders your component into the DOM</li>
+</ul>
+<h2>5) Next steps</h2>
+<ul>
+<li>Read <a href="./philosophy.html">Philosophy</a></li>
+<li>Open <a href="./demo/">Examples</a> and inspect source code</li>
+<li>Try <code>Show</code> and <code>For</code> for conditional and list rendering</li>
+</ul>
 
-  <div class="card">
-    <h2>1) Install</h2>
-    <pre><code>npm install @ztools.org/runtime</code></pre>
-  </div>
-
-  <div class="card">
-    <h2>2) Create a simple app</h2>
-    <pre><code>import { signal, computed, createTags, mount } from "@ztools.org/runtime";
-
-const [div, p, button] = createTags("div", "p", "button");
-
-function App() {
-  const count = signal(0);
-  const doubled = computed(() => count() * 2);
-
-  return div(
-    p("count: ", () => count(), " | doubled: ", () => doubled()),
-    button({ onClick: () => count.set(count() + 1) }, "Increment")
-  );
-}
-
-mount(App, document.getElementById("app"));
-</code></pre>
-  </div>
-
-  <div class="card">
-    <h2>3) Understand the core idea</h2>
-    <ul>
-      <li><code>signal()</code> stores reactive state</li>
-      <li><code>computed()</code> derives values from signals</li>
-      <li>Functions in JSX-like children/props (e.g. <code>() =&gt; count()</code>) re-render reactively</li>
-      <li><code>mount()</code> renders your component into the DOM</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>4) Next steps</h2>
-    <ul>
-      <li>Read <a href="./philosophy.html">Philosophy</a></li>
-      <li>Open <a href="./examples/">Examples</a> and inspect source code</li>
-      <li>Try <code>Show</code> and <code>For</code> for conditional and list rendering</li>
-    </ul>
-  </div>
 </body>
 </html>

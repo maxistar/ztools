@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: Inter, system-ui, Arial, sans-serif;
+  background: #f7f9fc;
+  color: #111827;
+}
+
+.app {
+  max-width: 860px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.status {
+  color: #4b5563;
+}
+
+.card {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+th {
+  background: #f3f6fb;
+  font-weight: 600;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}

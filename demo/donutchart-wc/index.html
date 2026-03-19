@@ -12,20 +12,29 @@
 
     const chart = document.getElementById("chart");
 
-    chart.data = [
-        { label: "Desktop", value: 45, color: "#4f46e5" },
-        { label: "Mobile", value: 30, color: "#06b6d4" },
-        { label: "Tablet", value: 15, color: "#10b981" },
-        { label: "Other", value: 10, color: "#f59e0b" }
+    const datasetA = [
+        { id: "desktop", label: "Desktop", value: 45, color: "#4f46e5" },
+        { id: "mobile",  label: "Mobile",  value: 30, color: "#06b6d4" },
+        { id: "tablet",  label: "Tablet",  value: 15, color: "#10b981" },
+        { id: "other",   label: "Other",   value: 10, color: "#f59e0b" }
     ];
 
+    const datasetB = [
+        { id: "desktop", label: "Desktop", value: 25, color: "#4f46e5" },
+        { id: "mobile",  label: "Mobile",  value: 50, color: "#06b6d4" },
+        { id: "tablet",  label: "Tablet",  value: 12, color: "#10b981" },
+        { id: "other",   label: "Other",   value: 13, color: "#f59e0b" }
+    ];
+
+    chart.data = datasetA;
+
     chart.addEventListener("sliceclick", (e) => {
-        console.log("sliceclick", e.detail.slice);
+        console.log("slice clicked:", e.detail.slice);
     });
 
-    chart.addEventListener("error", (e) => {
-        console.warn("chart error", e.detail);
-    });
+    setTimeout(() => {
+        chart.data = datasetB;
+    }, 1500);
 </script>
 </body>
 </html>

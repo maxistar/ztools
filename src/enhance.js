@@ -33,6 +33,34 @@ export function enhance(root, setup) {
   };
 }
 
+function collectRefs(root) {
+  const refs = Object.create(null);
+  const all = root.querySelectorAll("[data-ref]");
+
+  for (const el of all) {
+    const name = el.getAttribute("data-ref");
+    if (!name) continue;
+
+    if (refs[name] == null) {
+      refs[name] = el;
+    } else if (Array.isArray(refs[name])) {
+      refs[name].push(el);
+    } else {
+      refs[name] = [refs[name], el];
+    }
+  }
+
+  return refs;
+}
+
+export function enhanceWithRefs(root, setup) {
+  if (!root) throw new Error("enhanceWithRefs(root, setup): root is required");
+  if (typeof setup !== "function") throw new Error("enhanceWithRefs(root, setup): setup must be a function");
+
+  const refs = collectRefs(root);
+  return enhance(root, () => setup({ root, refs }));
+}
+
 export function mount(Component, container) {
   if (!container) throw new Error("mount(Component, container): container is required");
   if (typeof Component !== "function") throw new Error("mount(Component, container): Component must be a function");

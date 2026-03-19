@@ -114,6 +114,8 @@ export declare function Show<T>(
   fallback?: () => Node
 ): Comment;
 
+export declare const If: typeof Show;
+
 export declare function For<T>(
   listSignal: () => T[],
   renderItem: (item: T, index: Signal<number>) => Node,

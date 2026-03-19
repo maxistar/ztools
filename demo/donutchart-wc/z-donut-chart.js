@@ -1,27 +1,15 @@
 import {
-    h,
     defineComponent,
     signal,
     computed,
-    tags as t
-} from "../../ztools.js";
+    effect,
+    tags as t,
+} from "../../dist/ztools.client.full.js";
+import { DonutChartSvg } from "./donut-chart-svg.js";
 
-const SVG_NS = "http://www.w3.org/2000/svg";
-
-function svgTag(name) {
-    return function () {
-        const el = document.createElementNS(SVG_NS, name);
-        return h.apply(null, [el, ...arguments]);
-    };
-}
-
-const s = {
-    svg: svgTag("svg"),
-    g: svgTag("g"),
-    path: svgTag("path"),
-    rect: svgTag("rect"),
-    text: svgTag("text")
-};
+/* =========================
+   Geometry helpers
+========================= */
 
 function polarToCartesian(cx, cy, r, angleDeg) {
     const angleRad = (angleDeg - 90) * Math.PI / 180;
@@ -48,6 +36,10 @@ function describeDonutArc(cx, cy, outerR, innerR, startAngle, endAngle) {
     ].join(" ");
 }
 
+/* =========================
+   Data + animation helpers
+========================= */
+
 function normalizeData(list) {
     return (Array.isArray(list) ? list : []).map((item, i) => ({
         id: item.id ?? String(i),
@@ -57,6 +49,54 @@ function normalizeData(list) {
     }));
 }
 
+function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+}
+
+function alignData(from, to) {
+    const map = new Map((from || []).map(item => [item.id, item]));
+    return to.map(item => {
+        const prev = map.get(item.id);
+        return prev ? prev : { ...item, value: 0 };
+    });
+}
+
+function animateValues(from, to, duration, onUpdate, onDone) {
+    const start = performance.now();
+    let rafId = 0;
+
+    function frame(now) {
+        const t = Math.min(1, (now - start) / duration);
+        const k = easeOutCubic(t);
+
+        const next = to.map((item, i) => {
+            const fromItem = from[i] || { ...item, value: 0 };
+            return {
+                ...item,
+                value: fromItem.value + (item.value - fromItem.value) * k
+            };
+        });
+
+        onUpdate(next);
+
+        if (t < 1) {
+            rafId = requestAnimationFrame(frame);
+        } else if (onDone) {
+            onDone();
+        }
+    }
+
+    rafId = requestAnimationFrame(frame);
+
+    return function cancel() {
+        cancelAnimationFrame(rafId);
+    };
+}
+
+/* =========================
+   Component
+========================= */
+
 defineComponent("z-donut-chart", (props, host) => {
     const width = signal(Number(host.getAttribute("width") || 760));
     const height = signal(Number(host.getAttribute("height") || 360));
@@ -64,16 +104,45 @@ defineComponent("z-donut-chart", (props, host) => {
     const innerR = signal(Number(host.getAttribute("inner-radius") || 62));
     const title = signal(host.getAttribute("title") || "Distribution");
 
-    const data = signal([]);
+    const targetData = signal([]);
+    const animatedData = signal([]);
     const hovered = signal(null);
+
+    let cancelAnimation = null;
 
     // public property API
     if (!host.__zDonutPatched) {
         host.__zDonutPatched = true;
 
         Object.defineProperty(host, "data", {
-            get() { return data(); },
-            set(v) { data.set(normalizeData(v)); }
+            get() {
+                return targetData();
+            },
+            set(v) {
+                const next = normalizeData(v);
+
+                // first render: no animation
+                if (animatedData().length === 0) {
+                    targetData.set(next);
+                    animatedData.set(next);
+                    return;
+                }
+
+                if (cancelAnimation) cancelAnimation();
+
+                const prev = alignData(animatedData(), next);
+                targetData.set(next);
+
+                cancelAnimation = animateValues(
+                    prev,
+                    next,
+                    500,
+                    (frame) => animatedData.set(frame),
+                    () => {
+                        cancelAnimation = null;
+                    }
+                );
+            }
         });
     }
 
@@ -82,28 +151,25 @@ defineComponent("z-donut-chart", (props, host) => {
         try {
             const res = await fetch(url);
             const json = await res.json();
-            data.set(normalizeData(json));
+            host.data = json;
         } catch (e) {
             props.emit("error", { message: String(e?.message || e) });
         }
     }
 
-    // react to src/title/size attrs
-    if (props.$?.src) {
-        // observed via defineComponent option
-        const currentSrc = props.$.src();
-        if (currentSrc) loadFromSrc(currentSrc);
-    }
+    // read initial attrs
+    const src = host.getAttribute("src");
+    if (src) loadFromSrc(src);
 
     const cx = computed(() => 160);
     const cy = computed(() => Math.round(height() / 2));
 
     const total = computed(() =>
-        data().reduce((sum, item) => sum + item.value, 0)
+        animatedData().reduce((sum, item) => sum + item.value, 0)
     );
 
     const slices = computed(() => {
-        const list = data();
+        const list = animatedData();
         const sum = total();
         let angle = 0;
 
@@ -148,6 +214,14 @@ defineComponent("z-donut-chart", (props, host) => {
         return slices()[i] || null;
     });
 
+    // optional state event
+    effect(() => {
+        props.emit("change", {
+            total: total(),
+            hovered: hovered()
+        });
+    });
+
     return t.div(
         { className: "wrap" },
 
@@ -160,13 +234,16 @@ defineComponent("z-donut-chart", (props, host) => {
         align-items: start;
         font-family: system-ui, sans-serif;
       }
+
       .legend {
         padding-top: 42px;
       }
+
       .legend-title {
         font-weight: 600;
         margin-bottom: 12px;
       }
+
       .legend-row {
         display: grid;
         grid-template-columns: 14px 1fr auto;
@@ -176,14 +253,18 @@ defineComponent("z-donut-chart", (props, host) => {
         padding: 6px 8px;
         border-radius: 8px;
         cursor: pointer;
+        transition: background 120ms ease;
       }
+
       .legend-row:hover {
-        background: rgba(0,0,0,0.04);
+        background: rgba(0, 0, 0, 0.04);
       }
+
       .legend-value {
         opacity: 0.78;
         font-variant-numeric: tabular-nums;
       }
+
       .total {
         margin-top: 18px;
         padding-top: 12px;
@@ -192,168 +273,20 @@ defineComponent("z-donut-chart", (props, host) => {
       }
     `),
 
-        s.svg(
-            {
-                attrs: {
-                    width: () => width(),
-                    height: () => height(),
-                    viewBox: () => `0 0 ${width()} ${height()}`
-                },
-                style: {
-                    overflow: "visible",
-                    display: "block"
-                }
-            },
-
-            s.text(
-                {
-                    attrs: {
-                        x: 20,
-                        y: 28,
-                        fill: "#111"
-                    },
-                    style: {
-                        fontSize: "18px",
-                        fontWeight: "600"
-                    }
-                },
-                () => title()
-            ),
-
-            () => slices().map((slice) => {
-                const isActive = () => hovered() === slice.index;
-
-                return s.g(
-                    s.path({
-                        attrs: {
-                            d: slice.path,
-                            fill: slice.color,
-                            stroke: "#fff",
-                            "stroke-width": () => isActive() ? 4 : 2
-                        },
-                        opacity: () => {
-                            const h = hovered();
-                            return h == null || h === slice.index ? 1 : 0.72;
-                        },
-                        style: {
-                            cursor: "pointer"
-                        },
-                        onMouseenter: () => hovered.set(slice.index),
-                        onMouseleave: () => hovered.set(null),
-                        onClick: () => props.emit("sliceclick", { slice })
-                    }),
-
-                    () => slice.percent >= 8
-                        ? s.text(
-                            {
-                                attrs: {
-                                    x: slice.labelX,
-                                    y: slice.labelY,
-                                    fill: "#111",
-                                    "text-anchor": "middle",
-                                    "dominant-baseline": "middle"
-                                },
-                                style: {
-                                    fontSize: "12px",
-                                    fontWeight: "600",
-                                    pointerEvents: "none"
-                                }
-                            },
-                            `${slice.percent}%`
-                        )
-                        : null
-                );
-            }),
-
-            s.text(
-                {
-                    attrs: {
-                        x: () => cx(),
-                        y: () => cy() - 8,
-                        "text-anchor": "middle",
-                        fill: "#666"
-                    },
-                    style: {
-                        fontSize: "12px",
-                        fontWeight: "500"
-                    }
-                },
-                "Total"
-            ),
-
-            s.text(
-                {
-                    attrs: {
-                        x: () => cx(),
-                        y: () => cy() + 18,
-                        "text-anchor": "middle",
-                        fill: "#111"
-                    },
-                    style: {
-                        fontSize: "28px",
-                        fontWeight: "700"
-                    }
-                },
-                () => total()
-            ),
-
-            () => {
-                const active = activeSlice();
-                if (!active) return null;
-
-                const pos = polarToCartesian(cx(), cy(), outerR() + 28, active.midAngle);
-                const boxW = 120;
-                const boxH = 52;
-                const x = pos.x - boxW / 2;
-                const y = pos.y - boxH / 2;
-
-                return s.g(
-                    { style: { pointerEvents: "none" } },
-
-                    s.rect({
-                        attrs: {
-                            x,
-                            y,
-                            rx: 10,
-                            ry: 10,
-                            width: boxW,
-                            height: boxH,
-                            fill: "white",
-                            stroke: "#ddd"
-                        }
-                    }),
-
-                    s.text(
-                        {
-                            attrs: {
-                                x: x + 12,
-                                y: y + 20,
-                                fill: "#111"
-                            },
-                            style: {
-                                fontSize: "12px",
-                                fontWeight: "700"
-                            }
-                        },
-                        active.label
-                    ),
-
-                    s.text(
-                        {
-                            attrs: {
-                                x: x + 12,
-                                y: y + 38,
-                                fill: "#555"
-                            },
-                            style: {
-                                fontSize: "12px"
-                            }
-                        },
-                        `${active.value} (${active.percent}%)`
-                    )
-                );
-            }
-        ),
+        DonutChartSvg({
+            width,
+            height,
+            title,
+            cx,
+            cy,
+            outerR,
+            slices,
+            hovered,
+            setHovered: (i) => hovered.set(i),
+            activeSlice,
+            total,
+            onSliceClick: (slice) => props.emit("sliceclick", { slice }),
+        }),
 
         t.div(
             { className: "legend" },
@@ -366,7 +299,7 @@ defineComponent("z-donut-chart", (props, host) => {
                         className: "legend-row",
                         style: {
                             background: () => hovered() === slice.index
-                                ? "rgba(0,0,0,0.04)"
+                                ? "rgba(0, 0, 0, 0.04)"
                                 : "transparent"
                         },
                         onMouseenter: () => hovered.set(slice.index),
@@ -387,7 +320,7 @@ defineComponent("z-donut-chart", (props, host) => {
 
                     t.div(
                         { className: "legend-value" },
-                        `${slice.value} (${slice.percent}%)`
+                        () => `${Math.round(slice.value)} (${slice.percent}%)`
                     )
                 )
             ),
@@ -395,7 +328,7 @@ defineComponent("z-donut-chart", (props, host) => {
             t.div(
                 { className: "total" },
                 "Total: ",
-                () => total()
+                () => Math.round(total())
             )
         )
     );

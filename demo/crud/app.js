@@ -7,7 +7,7 @@ import {
   mount,
   batch,
   h,
-} from "../../ztools.client.js";
+} from "../../dist/ztools.client.full.js";
 
 import { apiFetch } from "./api.local.js";
 

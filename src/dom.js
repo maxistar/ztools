@@ -360,6 +360,9 @@ export function Show(when, render, fallback) {
   return anchor;
 }
 
+// Alias for newcomers who search for `If` semantics.
+export const If = Show;
+
 export function For(listSignal, renderItem, keyFn) {
   keyFn =
     keyFn ||

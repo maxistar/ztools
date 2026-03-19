@@ -1,5 +1,5 @@
 
-import { signal, computed, effect, batch, enhance } from "../../ztools.js";
+import { signal, computed, effect, batch, enhance } from "../../dist/ztools.client.full.js";
 
 function normalize(s) {
   return String(s || "").toLowerCase();
@@ -107,7 +107,6 @@ enhance(document.getElementById("app"), (root) => {
     for (const m of list) frag.appendChild(m.tr);
     tbody.appendChild(frag);
 
-    // hidden rows останутся в tbody тоже; мы их не трогаем (они просто hidden)
-    // Если хочешь, можно их всегда держать внизу — это уже отдельная политика.
+    // Hidden rows stay in tbody with `hidden` state; visible rows are reordered only.
   });
 });

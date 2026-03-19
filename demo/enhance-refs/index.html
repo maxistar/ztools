@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SSR table refs demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 20px; }
+    #contacts-app { max-width: 900px; margin: 0 auto; }
+    .toolbar { display: flex; gap: 12px; align-items: center; margin: 12px 0; }
+    input { padding: 8px 10px; width: 420px; max-width: 100%; }
+    .table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #eee; }
+    th { cursor: pointer; user-select: none; }
+    .muted { opacity: .75; }
+    th.active::after { margin-left: 6px; opacity: .8; }
+    th.active.asc::after { content: "↑"; }
+    th.active.desc::after { content: "↓"; }
+    tr:hover { background: rgba(0,0,0,.03); }
+  </style>
+</head>
+<body>
+  <div id="contacts-app">
+    <h1>Contacts (SSR → enhance)</h1>
+
+    <div class="toolbar">
+      <input data-ref="q" type="text" placeholder="Filter by name/email/phone…" />
+      <span class="muted">Shown: <strong data-ref="shown">5</strong></span>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th data-ref="sortName" data-sort="name">Name</th>
+          <th data-ref="sortEmail" data-sort="email">Email</th>
+          <th data-ref="sortPhone" data-sort="phone">Phone</th>
+        </tr>
+      </thead>
+      <tbody data-ref="body">
+        <tr data-ref="row" data-name="Alice" data-email="alice@example.com" data-phone="+49 111 111">
+          <td>Alice</td><td>alice@example.com</td><td>+49 111 111</td>
+        </tr>
+        <tr data-ref="row" data-name="Bob" data-email="bob@example.com" data-phone="+49 222 222">
+          <td>Bob</td><td>bob@example.com</td><td>+49 222 222</td>
+        </tr>
+        <tr data-ref="row" data-name="Clara" data-email="clara@example.com" data-phone="+49 333 333">
+          <td>Clara</td><td>clara@example.com</td><td>+49 333 333</td>
+        </tr>
+        <tr data-ref="row" data-name="Max" data-email="max@ztools.org" data-phone="+49 444 444">
+          <td>Max</td><td>max@ztools.org</td><td>+49 444 444</td>
+        </tr>
+        <tr data-ref="row" data-name="Dora" data-email="dora@example.com" data-phone="+49 555 555">
+          <td>Dora</td><td>dora@example.com</td><td>+49 555 555</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
