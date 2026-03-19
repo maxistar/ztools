@@ -22,6 +22,27 @@
 <h2><code>css\</code>…``</h2>
 <p>Concatenates template strings/values into one CSS string.
 Often used with <code>t.style(css\</code>…`)` in components.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> base</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "#0b57d0"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> styles</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> css</span><span style="color:#9ECBFF">`</span></span>
+<span class="line"><span style="color:#9ECBFF">  .btn {</span></span>
+<span class="line"><span style="color:#9ECBFF">    border: 1px solid ${</span><span style="color:#E1E4E8">base</span><span style="color:#9ECBFF">};</span></span>
+<span class="line"><span style="color:#9ECBFF">    color: ${</span><span style="color:#E1E4E8">base</span><span style="color:#9ECBFF">};</span></span>
+<span class="line"><span style="color:#9ECBFF">    padding: 8px 12px;</span></span>
+<span class="line"><span style="color:#9ECBFF">    border-radius: 8px;</span></span>
+<span class="line"><span style="color:#9ECBFF">  }</span></span>
+<span class="line"><span style="color:#9ECBFF">`</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span></code></pre>
+<h3>Typical usage with <code>t.style(...)</code></h3>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { tags </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> t, css } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/ztools.client.js"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> node</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> t.</span><span style="color:#B392F0">div</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  t.</span><span style="color:#B392F0">style</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">css</span><span style="color:#9ECBFF">`</span></span>
+<span class="line"><span style="color:#9ECBFF">    .card { border: 1px solid #ddd; border-radius: 10px; padding: 12px; }</span></span>
+<span class="line"><span style="color:#9ECBFF">  `</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">  t.</span><span style="color:#B392F0">div</span><span style="color:#E1E4E8">({ className: </span><span style="color:#9ECBFF">"card"</span><span style="color:#E1E4E8"> }, </span><span style="color:#9ECBFF">"Hello"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2>Related APIs</h2>
 <ul>
 <li><a href="./wc.js.html"><code>wc.js</code></a></li>
