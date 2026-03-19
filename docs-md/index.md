@@ -21,7 +21,7 @@ DOM-first. AI-ready. No framework.
 npm install @ztools.org/runtime
 ```
 
-## Quick start
+## Quick start (project / npm)
 
 ```js
 import { signal, computed, createTags, mount } from "@ztools.org/runtime";
@@ -39,6 +39,37 @@ function App() {
 }
 
 mount(App, document.body);
+```
+
+## Zero-setup (single HTML file)
+
+Copy this into `index.html` and open it in a browser:
+
+```html
+<!doctype html>
+<html>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      import { signal, computed, createTags, mount } from "./dist/ztools.client.full.js";
+
+      const [div, p, button] = createTags("div", "p", "button");
+
+      function App() {
+        const count = signal(0);
+        const doubled = computed(() => count() * 2);
+
+        return div(
+          p("count: ", () => count(), " x2=", () => doubled()),
+          button({ onClick: () => count.set(count() + 1) }, "+1")
+        );
+      }
+
+      mount(App, document.getElementById("app"));
+    </script>
+  </body>
+</html>
 ```
 
 ## API
