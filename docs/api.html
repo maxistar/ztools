@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools api reference</title>
+  <link rel="stylesheet" href="./styles/docs.css" />
+</head>
+<body>
+  <nav class="nav"><a href="./index.html">Docs Home</a><a href="./philosophy.html">Philosophy</a><a href="./getting-started.html">Getting Started</a><a href="./api.html"><strong>API</strong></a><a href="./demo/">Examples</a></nav>
+  <h1>API Reference</h1>
+<p>Complete quick reference for the core runtime.</p>
+<h2>Reactive core</h2>
+<h3><code>signal(initialValue)</code></h3>
+<p>Creates a reactive signal function.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> count</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#B392F0">count</span><span style="color:#E1E4E8">();      </span><span style="color:#6A737D">// read</span></span>
+<span class="line"><span style="color:#E1E4E8">count.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">); </span><span style="color:#6A737D">// write</span></span>
+<span class="line"></span></code></pre>
+<h3><code>computed(fn)</code></h3>
+<p>Creates a derived reactive value based on other signals.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> doubled</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> computed</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#B392F0"> count</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
+<h3><code>effect(fn)</code></h3>
+<p>Runs <code>fn</code> immediately and re-runs when accessed signals change.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">effect</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"count:"</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">count</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span></code></pre>
+<h3><code>batch(fn)</code></h3>
+<p>Groups multiple writes into one reactive flush.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">batch</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">  a.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  b.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span></code></pre>
+<h3><code>onCleanup(fn)</code></h3>
+<p>Registers cleanup logic for the current effect scope.</p>
+<hr>
+<h2>DOM builder</h2>
+<h3><code>h(target, ...args)</code></h3>
+<p>Universal DOM factory:</p>
+<ul>
+<li>tag name string (<code>&quot;div&quot;</code>)</li>
+<li>existing <code>Node</code> (enhance mode)</li>
+<li>component function</li>
+</ul>
+<h3><code>tag(name)</code></h3>
+<p>Returns a tag factory function.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> div</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> tag</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
+<h3><code>createTags(...names)</code></h3>
+<p>Returns array of tag factories.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">div</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">button</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> createTags</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"button"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
+<h3><code>tags</code></h3>
+<p>Proxy-based dynamic tag factory.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">div</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">button</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tags;</span></span>
+<span class="line"></span></code></pre>
+<h3>Explicit prop channels</h3>
+<p>You can separate attrs/props/events explicitly:</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">div</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  attrs: { </span><span style="color:#9ECBFF">"data-id"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"123"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">  props: { textContent: </span><span style="color:#9ECBFF">"Hello"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">  on: { </span><span style="color:#B392F0">click</span><span style="color:#E1E4E8">: () </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"click"</span><span style="color:#E1E4E8">) }</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span></code></pre>
+<p>Legacy syntax still works (<code>onClick</code>, <code>className</code>, <code>style</code>, etc.).</p>
+<hr>
+<h2>Render helpers</h2>
+<h3><code>Show(when, render, fallback?)</code></h3>
+<p>Conditional rendering helper.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">Show</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> visible</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Visible"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hidden"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span></code></pre>
+<h3><code>For(listSignal, renderItem, keyFn?)</code></h3>
+<p>Keyed list renderer with efficient DOM reuse/reorder.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">For</span><span style="color:#E1E4E8">(items, (</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> li</span><span style="color:#E1E4E8">(item.title), (</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> item.id)</span></span>
+<span class="line"></span></code></pre>
+<hr>
+<h2>Mount / enhance</h2>
+<h3><code>mount(component, root)</code></h3>
+<p>Mounts a component into a DOM node.
+Returns a dispose function.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> dispose</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> mount</span><span style="color:#E1E4E8">(App, document.body);</span></span>
+<span class="line"></span></code></pre>
+<h3><code>enhance(root, fn)</code></h3>
+<p>Enhances server-rendered or pre-existing DOM.</p>
+<hr>
+<h2>SSR API (<code>ztools.ssr.js</code>)</h2>
+<h3><code>h(tag, props?, ...children)</code></h3>
+<p>Creates an SSR node object.</p>
+<h3><code>renderToString(node)</code></h3>
+<p>Renders SSR node tree to HTML string.</p>
+<h3><code>tag(name)</code> / <code>tags</code></h3>
+<p>SSR tag helpers.</p>
+<h3><code>rawHtml(htmlString)</code></h3>
+<p>Inject trusted raw HTML without escaping.
+Use carefully.</p>
+<hr>
+<h2>Client extras</h2>
+<h3><code>css</code> (from <code>src/css.js</code>)</h3>
+<p>Template literal helper for style text.</p>
+<h3><code>defineComponent(name, Component, options?)</code> (from <code>src/wc.js</code>)</h3>
+<p>Web Components adapter with reactive attrs and helper API.</p>
+<hr>
+<h2>Bundle entry points</h2>
+<ul>
+<li><code>ztools.js</code> — default runtime exports</li>
+<li><code>ztools.client.js</code> — client-oriented exports (<code>wc</code>, <code>css</code>, DOM/reactive)</li>
+<li><code>ztools.ssr.js</code> — SSR-only exports</li>
+<li><code>dist/ztools.client.full.js</code> — full standalone browser bundle</li>
+<li><code>dist/ztools.ssr.full.js</code> — full standalone SSR bundle</li>
+</ul>
+
+</body>
+</html>

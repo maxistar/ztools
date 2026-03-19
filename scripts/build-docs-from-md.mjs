@@ -15,6 +15,7 @@ const pages = [
   { slug: "index", mdFile: "index.md", title: "ztools docs", navLabel: "Docs Home" },
   { slug: "philosophy", mdFile: "philosophy.md", title: "ztools philosophy", navLabel: "Philosophy" },
   { slug: "getting-started", mdFile: "getting-started.md", title: "ztools getting started", navLabel: "Getting Started" },
+  { slug: "api", mdFile: "api.md", title: "ztools api reference", navLabel: "API" },
 ];
 
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
@@ -30,6 +31,7 @@ function wrapPage({ title, currentSlug, contentHtml }) {
     navLink(currentSlug, "index", "Docs Home"),
     navLink(currentSlug, "philosophy", "Philosophy"),
     navLink(currentSlug, "getting-started", "Getting Started"),
+    navLink(currentSlug, "api", "API"),
     '<a href="./demo/">Examples</a>',
   ].join("");
 
