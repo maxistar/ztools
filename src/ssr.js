@@ -24,14 +24,24 @@ export function tag(name) {
   return (props, ...children) => h(name, props, ...children);
 }
 
-export const tags = new Proxy(
-  {},
-  {
-    get(_, name) {
-      return tag(name);
-    },
+function tagsFactory(...names) {
+  const out = Object.create(null);
+  for (let i = 0; i < names.length; i++) {
+    out[names[i]] = tag(names[i]);
+  }
+  return out;
+}
+
+export const tags = new Proxy(tagsFactory, {
+  get(target, name) {
+    if (name in target) return target[name];
+    if (typeof name !== "string") return undefined;
+    return tag(name);
   },
-);
+  apply(target, thisArg, argArray) {
+    return Reflect.apply(target, thisArg, argArray);
+  },
+});
 
 /**
  * rawHtml(content) — embed raw HTML without escaping.

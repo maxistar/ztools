@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { h, renderToString } from '../ztools.ssr.js';
+import { h, tags, renderToString } from '../ztools.ssr.js';
 
 describe('ssr props compatibility', () => {
   it('supports explicit attrs/props/on bags', () => {
@@ -37,5 +37,18 @@ describe('ssr props compatibility', () => {
     );
 
     expect(html).toBe('<input data-kind="field" type="text" class="legacy-ok" value="A">');
+  });
+
+  it('supports callable tags(...) factory in SSR', () => {
+    const t = tags('div', 'a');
+
+    const html = renderToString(
+      t.div(
+        { className: 'box' },
+        t.a({ href: '#ok' }, 'Open')
+      )
+    );
+
+    expect(html).toBe('<div class="box"><a href="#ok">Open</a></div>');
   });
 });
