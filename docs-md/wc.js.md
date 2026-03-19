@@ -28,6 +28,52 @@ Common options:
 - `observedAttributes`
 - `mapAttr`
 
+## Minimal example
+
+```js
+import { defineComponent, tags as t } from "@ztools.org/runtime/ztools.client.js";
+
+defineComponent("x-hello", (props) => {
+  return t.div(
+    t.strong("Hello, "),
+    () => props.$["name"]() || "world"
+  );
+}, {
+  shadow: true,
+  observedAttributes: ["name"]
+});
+```
+
+```html
+<x-hello name="Max"></x-hello>
+```
+
+## Event example (`props.emit`)
+
+```js
+defineComponent("x-counter", (props) => {
+  let value = Number(props.$["value"]() || 0);
+
+  return t.button({
+    onClick: () => {
+      value += 1;
+      props.setAttr("value", String(value));
+      props.emit("change", { value });
+    }
+  }, () => `Count: ${props.$["value"]() || 0}`);
+}, {
+  shadow: true,
+  observedAttributes: ["value"]
+});
+```
+
+```js
+document.querySelector("x-counter")
+  .addEventListener("change", (e) => {
+    console.log("new value", e.detail.value);
+  });
+```
+
 ## Related APIs
 
 - [`dom.js`](./dom.js.html)
