@@ -26,13 +26,32 @@
 <p>Use <code>ssr.js</code> in Node/server build steps to produce deterministic HTML strings before shipping pages.</p>
 <h2><code>h(tag, props?, ...children)</code></h2>
 <p>Creates SSR node objects.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> node</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> h</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"h1"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"Hello SSR"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2><code>tag(name)</code> / <code>tags</code></h2>
 <p>Tag helpers for SSR trees.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">html</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">head</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">body</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">h1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">p</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tags;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> page</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> html</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  head</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#B392F0">  body</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    h1</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ztools SSR"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">    p</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Generated on server/build step"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">  )</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2><code>renderToString(node)</code></h2>
 <p>Renders SSR tree to HTML string.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> htmlText</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "&#x3C;!doctype html></span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#F97583"> +</span><span style="color:#B392F0"> renderToString</span><span style="color:#E1E4E8">(page);</span></span>
+<span class="line"></span></code></pre>
 <h2><code>rawHtml(html)</code></h2>
 <p>Injects trusted raw HTML without escaping.
 Use carefully (only trusted content).</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> page</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> h</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">  h</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"h2"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"Embed trusted snippet"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">  rawHtml</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"&#x3C;p>&#x3C;strong>Trusted HTML&#x3C;/strong> injected as-is.&#x3C;/p>"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2>Related APIs</h2>
 <ul>
 <li><a href="./core.js.html"><code>core.js</code></a></li>
