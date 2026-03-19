@@ -15,12 +15,23 @@
 <li><code>mount</code></li>
 </ul>
 <p>Progressive enhancement helpers.</p>
+<h2>Import example</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { mount, enhance } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span></code></pre>
+<h2>When to use</h2>
+<p>Use <code>enhance.js</code> when you already have DOM (SSR/static/server-rendered) and want to attach behavior without rebuilding markup.</p>
 <h2><code>mount(component, root)</code></h2>
 <p>Mounts a component into a DOM root.
 Returns a dispose function.</p>
 <h2><code>enhance(root, fn)</code></h2>
 <p>Enhances already existing DOM nodes (SSR/static HTML upgrade scenario).</p>
 <p>Use this when HTML is pre-rendered and you want to attach behavior/reactivity without full rerender.</p>
+<h2>Related APIs</h2>
+<ul>
+<li><a href="./dom.js.html"><code>dom.js</code></a></li>
+<li><a href="./core.js.html"><code>core.js</code></a></li>
+<li><a href="./ssr.js.html"><code>ssr.js</code></a></li>
+</ul>
 
 </body>
 </html>

@@ -2,6 +2,16 @@
 
 DOM-first rendering primitives.
 
+## Import example
+
+```js
+import { h, tag, createTags, tags, Show, For } from "@ztools.org/runtime";
+```
+
+## When to use
+
+Use `dom.js` when building client-side UI directly with DOM nodes and reactive values.
+
 ## `h(target, ...args)`
 
 Universal node factory:
@@ -37,3 +47,9 @@ Conditional branch rendering.
 ## `For(listSignal, renderItem, keyFn?)`
 
 Keyed list rendering with efficient node reuse/reorder.
+
+## Related APIs
+
+- [`core.js`](./core.js.html)
+- [`enhance.js`](./enhance.js.html)
+- [`wc.js`](./wc.js.html)

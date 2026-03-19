@@ -19,6 +19,11 @@
 <li><code>tags</code></li>
 </ul>
 <p>Server-side rendering utilities.</p>
+<h2>Import example</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { h, tags, renderToString, rawHtml } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/ztools.ssr.js"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span></code></pre>
+<h2>When to use</h2>
+<p>Use <code>ssr.js</code> in Node/server build steps to produce deterministic HTML strings before shipping pages.</p>
 <h2><code>h(tag, props?, ...children)</code></h2>
 <p>Creates SSR node objects.</p>
 <h2><code>tag(name)</code> / <code>tags</code></h2>
@@ -28,6 +33,12 @@
 <h2><code>rawHtml(html)</code></h2>
 <p>Injects trusted raw HTML without escaping.
 Use carefully (only trusted content).</p>
+<h2>Related APIs</h2>
+<ul>
+<li><a href="./core.js.html"><code>core.js</code></a></li>
+<li><a href="./dom.js.html"><code>dom.js</code></a></li>
+<li><a href="./ztools.ssr.js.html"><code>ztools.ssr.js</code></a></li>
+</ul>
 
 </body>
 </html>

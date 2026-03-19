@@ -14,6 +14,11 @@
 <li>Re-export all from <code>./src/ssr.js</code></li>
 </ul>
 <p>SSR-only entry point.</p>
+<h2>Import example</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { h, tags, renderToString } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/ztools.ssr.js"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span></code></pre>
+<h2>When to use</h2>
+<p>Use this entry in Node/build pipelines when you only need SSR helpers and no browser runtime.</p>
 <p>Re-exports <code>./src/ssr.js</code>.</p>
 <p>Use this on Node/server build steps to generate HTML with:</p>
 <ul>
@@ -21,6 +26,12 @@
 <li><code>tag</code> / <code>tags</code></li>
 <li><code>renderToString</code></li>
 <li><code>rawHtml</code></li>
+</ul>
+<h2>Related APIs</h2>
+<ul>
+<li><a href="./ssr.js.html"><code>ssr.js</code></a></li>
+<li><a href="./ztools.js.html"><code>ztools.js</code></a></li>
+<li><a href="./ztools.client.js.html"><code>ztools.client.js</code></a></li>
 </ul>
 
 </body>

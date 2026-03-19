@@ -19,6 +19,11 @@
 <li><code>tags</code></li>
 </ul>
 <p>DOM-first rendering primitives.</p>
+<h2>Import example</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { h, tag, createTags, tags, Show, For } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span></code></pre>
+<h2>When to use</h2>
+<p>Use <code>dom.js</code> when building client-side UI directly with DOM nodes and reactive values.</p>
 <h2><code>h(target, ...args)</code></h2>
 <p>Universal node factory:</p>
 <ul>
@@ -43,6 +48,12 @@
 <p>Conditional branch rendering.</p>
 <h2><code>For(listSignal, renderItem, keyFn?)</code></h2>
 <p>Keyed list rendering with efficient node reuse/reorder.</p>
+<h2>Related APIs</h2>
+<ul>
+<li><a href="./core.js.html"><code>core.js</code></a></li>
+<li><a href="./enhance.js.html"><code>enhance.js</code></a></li>
+<li><a href="./wc.js.html"><code>wc.js</code></a></li>
+</ul>
 
 </body>
 </html>
