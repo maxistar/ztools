@@ -5,7 +5,7 @@ Optional helper for CSS template literals.
 ## Import example
 
 ```js
-import { css } from "@ztools.org/runtime/ztools.client.js";
+import { css } from "@ztools.org/runtime/client";
 ```
 
 ## When to use
@@ -35,7 +35,7 @@ const styles = css`
 ### Typical usage with `t.style(...)`
 
 ```js
-import { tags as t, css } from "@ztools.org/runtime/ztools.client.js";
+import { tags as t, css } from "@ztools.org/runtime/client";
 
 const node = t.div(
   t.style(css`

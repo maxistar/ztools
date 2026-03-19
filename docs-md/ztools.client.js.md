@@ -5,7 +5,7 @@ Client-oriented entry point.
 ## Import example
 
 ```js
-import { signal, tags, defineComponent, css } from "@ztools.org/runtime/ztools.client.js";
+import { signal, tags, defineComponent, css } from "@ztools.org/runtime/client";
 ```
 
 ## When to use

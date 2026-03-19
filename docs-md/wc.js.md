@@ -5,7 +5,7 @@ Web Components adapter.
 ## Import example
 
 ```js
-import { defineComponent } from "@ztools.org/runtime/ztools.client.js";
+import { defineComponent } from "@ztools.org/runtime/client";
 ```
 
 ## When to use
@@ -31,7 +31,7 @@ Common options:
 ## Minimal example
 
 ```js
-import { defineComponent, tags as t } from "@ztools.org/runtime/ztools.client.js";
+import { defineComponent, tags as t } from "@ztools.org/runtime/client";
 
 defineComponent("x-hello", (props) => {
   return t.div(

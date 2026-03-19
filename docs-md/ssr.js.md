@@ -5,7 +5,7 @@ Server-side rendering utilities.
 ## Import example
 
 ```js
-import { h, tags, renderToString, rawHtml } from "@ztools.org/runtime/ztools.ssr.js";
+import { h, tags, renderToString, rawHtml } from "@ztools.org/runtime/ssr";
 ```
 
 ## When to use

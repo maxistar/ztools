@@ -15,7 +15,7 @@
 </ul>
 <p>Web Components adapter.</p>
 <h2>Import example</h2>
-<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { defineComponent } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/ztools.client.js"</span><span style="color:#E1E4E8">;</span></span>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { defineComponent } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/client"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span></code></pre>
 <h2>When to use</h2>
 <p>Use <code>wc.js</code> when you want framework-agnostic custom elements with reactive internals and plain HTML usage.</p>
@@ -36,7 +36,7 @@
 <li><code>mapAttr</code></li>
 </ul>
 <h2>Minimal example</h2>
-<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { defineComponent, tags </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> t } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/ztools.client.js"</span><span style="color:#E1E4E8">;</span></span>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { defineComponent, tags </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> t } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime/client"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#B392F0">defineComponent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"x-hello"</span><span style="color:#E1E4E8">, (</span><span style="color:#FFAB70">props</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> t.</span><span style="color:#B392F0">div</span><span style="color:#E1E4E8">(</span></span>

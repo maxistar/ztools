@@ -5,7 +5,7 @@ SSR-only entry point.
 ## Import example
 
 ```js
-import { h, tags, renderToString } from "@ztools.org/runtime/ztools.ssr.js";
+import { h, tags, renderToString } from "@ztools.org/runtime/ssr";
 ```
 
 ## When to use

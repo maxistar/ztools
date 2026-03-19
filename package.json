@@ -10,6 +10,22 @@
     ".": {
       "types": "./ztools.d.ts",
       "default": "./ztools.js"
+    },
+    "./client": {
+      "types": "./ztools.d.ts",
+      "default": "./ztools.client.js"
+    },
+    "./ssr": {
+      "types": "./ztools.d.ts",
+      "default": "./ztools.ssr.js"
+    },
+    "./ztools.client.js": {
+      "types": "./ztools.d.ts",
+      "default": "./ztools.client.js"
+    },
+    "./ztools.ssr.js": {
+      "types": "./ztools.d.ts",
+      "default": "./ztools.ssr.js"
     }
   },
   "files": [
