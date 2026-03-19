@@ -1,6 +1,6 @@
 # ztools
 
-**Zero-dependencies reactive runtime**
+**Zero-dependencies reactive UI runtime**
 
 DOM-first. AI-ready. No framework.
 
