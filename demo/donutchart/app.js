@@ -28,7 +28,7 @@ function App() {
   return t.div(
     {
       style: {
-        maxWidth: "920px",
+        maxWidth: "820px",
         margin: "0 auto",
         padding: "24px",
         fontFamily: "system-ui, sans-serif",

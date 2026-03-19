@@ -98,7 +98,7 @@ function animateValues(from, to, duration, onUpdate, onDone) {
 ========================= */
 
 defineComponent("z-donut-chart", (props, host) => {
-    const width = signal(Number(host.getAttribute("width") || 760));
+    const width = signal(Number(host.getAttribute("width") || 360));
     const height = signal(Number(host.getAttribute("height") || 360));
     const outerR = signal(Number(host.getAttribute("outer-radius") || 110));
     const innerR = signal(Number(host.getAttribute("inner-radius") || 62));

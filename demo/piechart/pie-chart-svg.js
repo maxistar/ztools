@@ -46,7 +46,7 @@ function describeArc(cx, cy, r, startAngle, endAngle) {
   ].join(" ");
 }
 
-export function PieChart({ data, width = 520, height = 320, radius = 110 }) {
+export function PieChart({ data, width = 320, height = 320, radius = 110 }) {
   const cx = width / 2;
   const cy = height / 2;
 

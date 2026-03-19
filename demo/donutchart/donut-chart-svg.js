@@ -38,7 +38,7 @@ function describeDonutArc(cx, cy, outerR, innerR, startAngle, endAngle) {
   ].join(" ");
 }
 
-export function DonutChart({ data, width = 760, height = 360, outerR = 110, innerR = 62 }) {
+export function DonutChart({ data, width = 360, height = 360, outerR = 110, innerR = 62 }) {
   const cx = 160;
   const cy = 170;
   const hovered = signal(null);
