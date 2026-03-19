@@ -21,26 +21,6 @@ DOM-first. AI-ready. No framework.
 npm install @ztools.org/runtime
 ```
 
-## Quick start (project / npm)
-
-```js
-import { signal, computed, createTags, mount } from "@ztools.org/runtime";
-
-const [div, p, button] = createTags("div", "p", "button");
-
-function App() {
-  const count = signal(0);
-  const doubled = computed(() => count() * 2);
-
-  return div(
-    p("count: ", () => count(), " x2=", () => doubled()),
-    button({ onClick: () => count.set(count() + 1) }, "+1")
-  );
-}
-
-mount(App, document.body);
-```
-
 ## Zero-setup (single HTML file)
 
 Copy this into `index.html` and open it in a browser:
@@ -72,12 +52,16 @@ Copy this into `index.html` and open it in a browser:
 </html>
 ```
 
+For a full project setup walkthrough, see [Getting Started](./getting-started.html).
+
 ## API
 
 - `signal`, `effect`, `computed`, `batch`, `onCleanup`
 - `h`, `tag`, `createTags`, `tags`
 - `Show`, `For`
 - `mount`, `enhance`
+
+See full API reference: [API](./api.html)
 
 ## Examples
 
