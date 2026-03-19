@@ -4,96 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ztools docs</title>
-  <style>
-    body { font-family: Inter, system-ui, Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 16px; line-height: 1.6; }
-    code, pre { background: #f6f8fa; border-radius: 6px; }
-    :not(pre) > code,
-    p code,
-    li code,
-    td code,
-    th code { padding: 2px 6px; }
-    pre { padding: 12px; overflow-x: auto; }
-    pre > code {
-      padding: 0;
-      margin: 0;
-      display: block;
-      background: transparent;
-    }
-    h1, h2 { line-height: 1.25; }
-    .muted { color: #666; }
-    .card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin: 10px 0; }
-    a { color: #0b57d0; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="./styles/docs.css" />
 </head>
 <body>
-  <nav style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
-    <a href="./index.html"><strong>Docs Home</strong></a>
-    <a href="./philosophy.html">Philosophy</a>
-    <a href="./getting-started.html">Getting Started</a>
-    <a href="./demo/">Examples</a>
-  </nav>
-
+  <nav class="nav"><a href="./index.html"><strong>Docs Home</strong></a><a href="./philosophy.html">Philosophy</a><a href="./getting-started.html">Getting Started</a><a href="./demo/">Examples</a></nav>
   <h1>ztools</h1>
-  <p class="muted"><strong>Zero-dependencies reactive runtime</strong></p>
-  <p class="muted">DOM-first. AI-ready. No framework.</p>
+<p><strong>Zero-dependencies reactive runtime</strong></p>
+<p>DOM-first. AI-ready. No framework.</p>
+<h2>Features</h2>
+<ul>
+<li>Fine-grained reactivity with <code>signal</code>, <code>computed</code>, <code>effect</code>, and <code>batch</code></li>
+<li>DOM-first rendering via <code>h</code>, <code>tag</code>, <code>createTags</code>, and dynamic <code>tags</code> proxy</li>
+<li>Declarative conditional/list rendering with <code>Show</code> and keyed <code>For</code></li>
+<li>Component mount and progressive enhancement with <code>mount</code> and <code>enhance</code></li>
+<li>Server-side rendering with <code>ztools.ssr.js</code> and <code>renderToString</code></li>
+<li>Web Components support via <code>defineComponent</code> (<code>wc.js</code>)</li>
+<li>SVG-friendly rendering (custom SVG elements + reactive attributes)</li>
+<li>Zero runtime dependencies in the browser + optional full standalone bundles (<code>ztools.client.full.js</code> ≈ 16.3 KB, <code>ztools.ssr.full.js</code> ≈ 2.9 KB — honest raw size, uncompressed, not minified)</li>
+</ul>
+<h2>Install</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> @ztools.org/runtime</span></span>
+<span class="line"></span></code></pre>
+<h2>Quick start</h2>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { signal, computed, createTags, mount } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">div</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">p</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">button</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> createTags</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"p"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"button"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> App</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> count</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> doubled</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> computed</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#B392F0"> count</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    p</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"count: "</span><span style="color:#E1E4E8">, () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> count</span><span style="color:#E1E4E8">(), </span><span style="color:#9ECBFF">" x2="</span><span style="color:#E1E4E8">, () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> doubled</span><span style="color:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#B392F0">    button</span><span style="color:#E1E4E8">({ </span><span style="color:#B392F0">onClick</span><span style="color:#E1E4E8">: () </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> count.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">count</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) }, </span><span style="color:#9ECBFF">"+1"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">mount</span><span style="color:#E1E4E8">(App, document.body);</span></span>
+<span class="line"></span></code></pre>
+<h2>API</h2>
+<ul>
+<li><code>signal</code>, <code>effect</code>, <code>computed</code>, <code>batch</code>, <code>onCleanup</code></li>
+<li><code>h</code>, <code>tag</code>, <code>createTags</code>, <code>tags</code></li>
+<li><code>Show</code>, <code>For</code></li>
+<li><code>mount</code>, <code>enhance</code></li>
+</ul>
+<h2>Examples</h2>
+<p>Examples are published here: <a href="./demo/">/demo/</a></p>
+<h2>Source</h2>
+<p><a href="https://github.com/maxistar/ztools">github.com/maxistar/ztools</a></p>
 
-  <div class="card">
-    <h2>Features</h2>
-    <ul>
-      <li>Fine-grained reactivity with <code>signal</code>, <code>computed</code>, <code>effect</code>, and <code>batch</code></li>
-      <li>DOM-first rendering via <code>h</code>, <code>tag</code>, <code>createTags</code>, and dynamic <code>tags</code> proxy</li>
-      <li>Declarative conditional/list rendering with <code>Show</code> and keyed <code>For</code></li>
-      <li>Component mount and progressive enhancement with <code>mount</code> and <code>enhance</code></li>
-      <li>Server-side rendering with <code>ztools.ssr.js</code> and <code>renderToString</code></li>
-      <li>Web Components support via <code>defineComponent</code> (<code>wc.js</code>)</li>
-      <li>SVG-friendly rendering (custom SVG elements + reactive attributes)</li>
-      <li>Zero runtime dependencies in the browser + optional full standalone bundles (<code>ztools.client.full.js</code> ≈ 16.3 KB, <code>ztools.ssr.full.js</code> ≈ 2.9 KB — honest raw size, uncompressed, not minified)</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>Install</h2>
-    <pre><code>npm install @ztools.org/runtime</code></pre>
-  </div>
-
-  <div class="card">
-    <h2>Quick start</h2>
-    <pre><code>import { signal, computed, createTags, mount } from "@ztools.org/runtime";
-
-const [div, p, button] = createTags("div", "p", "button");
-
-function App() {
-  const count = signal(0);
-  const doubled = computed(() =&gt; count() * 2);
-
-  return div(
-    p("count: ", () =&gt; count(), " x2=", () =&gt; doubled()),
-    button({ onClick: () =&gt; count.set(count() + 1) }, "+1")
-  );
-}
-
-mount(App, document.body);
-</code></pre>
-  </div>
-
-  <div class="card">
-    <h2>API</h2>
-    <ul>
-      <li><code>signal</code>, <code>effect</code>, <code>computed</code>, <code>batch</code>, <code>onCleanup</code></li>
-      <li><code>h</code>, <code>tag</code>, <code>createTags</code>, <code>tags</code></li>
-      <li><code>Show</code>, <code>For</code></li>
-      <li><code>mount</code>, <code>enhance</code></li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>Examples</h2>
-    <p>Examples are published here: <a href="./demo/">/demo/</a></p>
-  </div>
-
-  <p>
-    Source: <a href="https://github.com/maxistar/ztools" target="_blank" rel="noopener">github.com/maxistar/ztools</a>
-  </p>
 </body>
 </html>

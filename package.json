@@ -29,7 +29,8 @@
     "build:full:client": "esbuild ztools.client.js --bundle --format=esm --platform=browser --target=es2020 --outfile=dist/ztools.client.full.js",
     "build:full:ssr": "esbuild ztools.ssr.js --bundle --format=esm --platform=node --target=node20 --outfile=dist/ztools.ssr.full.js",
     "build:full": "npm run build:full:client && npm run build:full:ssr",
-    "build:pages": "node ./scripts/build-pages.mjs",
+    "build:docs": "node ./scripts/build-docs-from-md.mjs",
+    "build:pages": "npm run build:docs && node ./scripts/build-pages.mjs",
     "generate:ssr-demo": "node ./demo/ssr/generate-ssr-page.mjs"
   },
   "keywords": [
@@ -45,6 +46,7 @@
     "eslint": "^10.0.2",
     "globals": "^17.3.0",
     "jsdom": "^24.1.0",
+    "markdown-it": "^14.1.1",
     "vitest": "^2.0.5"
   },
   "publishConfig": {
