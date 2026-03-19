@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools wc.js</title>
+  <link rel="stylesheet" href="./styles/docs.css" />
+</head>
+<body>
+  <nav class="nav"><a href="./index.html">Docs Home</a><a href="./philosophy.html">Philosophy</a><a href="./getting-started.html">Getting Started</a><a href="./api.html">API</a><a href="./demo/">Examples</a></nav>
+  <h1>wc.js</h1>
+<p>Web Components adapter.</p>
+<h2><code>defineComponent(name, Component, options?)</code></h2>
+<p>Defines a custom element and mounts ztools content inside it.</p>
+<p>Component receives:</p>
+<ul>
+<li><code>props.attrs</code> — current attributes snapshot</li>
+<li><code>props.$</code> — reactive attribute signals (for observed attrs)</li>
+<li><code>props.setAttr(name, value)</code></li>
+<li><code>props.emit(type, detail, opts?)</code></li>
+</ul>
+<p>Common options:</p>
+<ul>
+<li><code>shadow</code> (default true)</li>
+<li><code>mode</code> (<code>open</code>/<code>closed</code>)</li>
+<li><code>observedAttributes</code></li>
+<li><code>mapAttr</code></li>
+</ul>
+
+</body>
+</html>

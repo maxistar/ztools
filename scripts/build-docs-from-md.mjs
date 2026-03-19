@@ -15,7 +15,18 @@ const pages = [
   { slug: "index", mdFile: "index.md", title: "ztools docs", navLabel: "Docs Home" },
   { slug: "philosophy", mdFile: "philosophy.md", title: "ztools philosophy", navLabel: "Philosophy" },
   { slug: "getting-started", mdFile: "getting-started.md", title: "ztools getting started", navLabel: "Getting Started" },
-  { slug: "api", mdFile: "api.md", title: "ztools api reference", navLabel: "API" },
+  { slug: "api", mdFile: "api.md", title: "ztools api", navLabel: "API" },
+
+  // API subpages (file-name based)
+  { slug: "core.js", mdFile: "core.js.md", title: "ztools core.js", navLabel: "core.js" },
+  { slug: "dom.js", mdFile: "dom.js.md", title: "ztools dom.js", navLabel: "dom.js" },
+  { slug: "enhance.js", mdFile: "enhance.js.md", title: "ztools enhance.js", navLabel: "enhance.js" },
+  { slug: "ssr.js", mdFile: "ssr.js.md", title: "ztools ssr.js", navLabel: "ssr.js" },
+  { slug: "wc.js", mdFile: "wc.js.md", title: "ztools wc.js", navLabel: "wc.js" },
+  { slug: "css.js", mdFile: "css.js.md", title: "ztools css.js", navLabel: "css.js" },
+  { slug: "ztools.js", mdFile: "ztools.js.md", title: "ztools ztools.js", navLabel: "ztools.js" },
+  { slug: "ztools.client.js", mdFile: "ztools.client.js.md", title: "ztools ztools.client.js", navLabel: "ztools.client.js" },
+  { slug: "ztools.ssr.js", mdFile: "ztools.ssr.js.md", title: "ztools ztools.ssr.js", navLabel: "ztools.ssr.js" },
 ];
 
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true });

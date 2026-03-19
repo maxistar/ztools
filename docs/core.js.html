@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ztools core.js</title>
+  <link rel="stylesheet" href="./styles/docs.css" />
+</head>
+<body>
+  <nav class="nav"><a href="./index.html">Docs Home</a><a href="./philosophy.html">Philosophy</a><a href="./getting-started.html">Getting Started</a><a href="./api.html">API</a><a href="./demo/">Examples</a></nav>
+  <h1>core.js</h1>
+<p>Reactive core primitives.</p>
+<h2><code>signal(initialValue)</code></h2>
+<p>Creates reactive state:</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> count</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#B392F0">count</span><span style="color:#E1E4E8">();      </span><span style="color:#6A737D">// read</span></span>
+<span class="line"><span style="color:#E1E4E8">count.</span><span style="color:#B392F0">set</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">); </span><span style="color:#6A737D">// write</span></span>
+<span class="line"></span></code></pre>
+<h2><code>computed(fn)</code></h2>
+<p>Derived value based on signals.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> doubled</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> computed</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#B392F0"> count</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
+<h2><code>effect(fn)</code></h2>
+<p>Runs immediately and re-runs when tracked signals change.</p>
+<h2><code>batch(fn)</code></h2>
+<p>Batches multiple writes into one flush.</p>
+<h2><code>onCleanup(fn)</code></h2>
+<p>Registers effect cleanup callback.</p>
+
+</body>
+</html>
