@@ -40,7 +40,9 @@ const ui = div(
 
 ## `tags`
 
-Proxy-based dynamic tag creators.
+Dual-mode API:
+- Proxy getters: `tags.div(...)`
+- Callable factory: `tags("div", "a")` → `{ div, a }`
 
 ```js
 const { section, h2, ul, li } = tags;
@@ -49,6 +51,9 @@ const block = section(
   h2("Items"),
   ul(li("A"), li("B"), li("C"))
 );
+
+const t = tags("div", "a");
+const link = t.div(t.a({ href: "#" }, "Open"));
 ```
 
 ## Props model

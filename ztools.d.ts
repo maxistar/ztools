@@ -104,9 +104,21 @@ export declare function createTags(
   ...tagNames: string[]
 ): Array<(...args: ElementArg<HTMLElement>[]) => HTMLElement>;
 
-export declare const tags: {
+export interface TagsFactory {
+  <K extends keyof HTMLElementTagNameMap>(
+    ...tagNames: readonly K[]
+  ): {
+    [P in K]: (
+      ...args: ElementArg<HTMLElementTagNameMap[P]>[]
+    ) => HTMLElementTagNameMap[P];
+  };
+  (...tagNames: string[]): {
+    [tagName: string]: (...args: ElementArg<HTMLElement>[]) => HTMLElement;
+  };
   [tagName: string]: (...args: ElementArg<HTMLElement>[]) => HTMLElement;
-};
+}
+
+export declare const tags: TagsFactory;
 
 export declare function Show<T>(
   when: (() => T) | T,

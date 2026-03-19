@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { signal, computed, effect, batch, createTags, For, Show, mount } from '../ztools.js';
+import { signal, computed, effect, batch, createTags, tags, For, Show, mount } from '../ztools.js';
 
 describe('reactive core', () => {
   it('signal/effect reacts to set', () => {
@@ -216,5 +216,21 @@ describe('dom helpers', () => {
 
     expect(inputEl).toBeInstanceOf(HTMLInputElement);
     expect(document.activeElement).toBe(inputEl);
+  });
+
+  it('supports tags(...) callable factory in addition to tags.div getter style', () => {
+    const t = tags('div', 'a');
+
+    const node = t.div(
+      { className: 'box' },
+      t.a({ href: '#ok' }, 'Open')
+    );
+
+    document.body.appendChild(node);
+
+    expect(node.tagName).toBe('DIV');
+    expect(node.className).toBe('box');
+    expect(node.querySelector('a')?.getAttribute('href')).toBe('#ok');
+    expect(node.textContent).toBe('Open');
   });
 });

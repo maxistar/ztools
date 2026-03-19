@@ -292,14 +292,28 @@ export function createTags() {
   return out;
 }
 
-export const tags = new Proxy(
-  {},
-  {
-    get(_, name) {
-      return tag(name);
-    },
+function tagsFactory() {
+  const out = Object.create(null);
+  for (let i = 0; i < arguments.length; i++) {
+    const name = arguments[i];
+    out[name] = tag(name);
+  }
+  return out;
+}
+
+// `tags` is dual-mode:
+// 1) property proxy: tags.div(...)
+// 2) callable factory: tags("div", "a") -> { div, a }
+export const tags = new Proxy(tagsFactory, {
+  get(target, name) {
+    if (name in target) return target[name];
+    if (typeof name !== "string") return undefined;
+    return tag(name);
   },
-);
+  apply(target, thisArg, argArray) {
+    return Reflect.apply(target, thisArg, argArray);
+  },
+});
 
 // Optional: Show / For (handy for SPA mode)
 

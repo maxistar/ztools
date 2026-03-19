@@ -46,13 +46,20 @@
 <span class="line"><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span></code></pre>
 <h2><code>tags</code></h2>
-<p>Proxy-based dynamic tag creators.</p>
+<p>Dual-mode API:</p>
+<ul>
+<li>Proxy getters: <code>tags.div(...)</code></li>
+<li>Callable factory: <code>tags(&quot;div&quot;, &quot;a&quot;)</code> → <code>{ div, a }</code></li>
+</ul>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">section</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">h2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">ul</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">li</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tags;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> block</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> section</span><span style="color:#E1E4E8">(</span></span>
 <span class="line"><span style="color:#B392F0">  h2</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Items"</span><span style="color:#E1E4E8">),</span></span>
 <span class="line"><span style="color:#B392F0">  ul</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">li</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"A"</span><span style="color:#E1E4E8">), </span><span style="color:#B392F0">li</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"B"</span><span style="color:#E1E4E8">), </span><span style="color:#B392F0">li</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"C"</span><span style="color:#E1E4E8">))</span></span>
 <span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> t</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> tags</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"a"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> link</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> t.</span><span style="color:#B392F0">div</span><span style="color:#E1E4E8">(t.</span><span style="color:#B392F0">a</span><span style="color:#E1E4E8">({ href: </span><span style="color:#9ECBFF">"#"</span><span style="color:#E1E4E8"> }, </span><span style="color:#9ECBFF">"Open"</span><span style="color:#E1E4E8">));</span></span>
 <span class="line"></span></code></pre>
 <h2>Props model</h2>
 <p>Supports legacy and explicit channels:</p>

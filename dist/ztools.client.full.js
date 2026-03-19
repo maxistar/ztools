@@ -341,14 +341,24 @@ function createTags() {
   }
   return out;
 }
-var tags = new Proxy(
-  {},
-  {
-    get(_, name) {
-      return tag(name);
-    }
+function tagsFactory() {
+  const out = /* @__PURE__ */ Object.create(null);
+  for (let i = 0; i < arguments.length; i++) {
+    const name = arguments[i];
+    out[name] = tag(name);
   }
-);
+  return out;
+}
+var tags = new Proxy(tagsFactory, {
+  get(target, name) {
+    if (name in target) return target[name];
+    if (typeof name !== "string") return void 0;
+    return tag(name);
+  },
+  apply(target, thisArg, argArray) {
+    return Reflect.apply(target, thisArg, argArray);
+  }
+});
 function Show(when, render, fallback) {
   const anchor = document.createComment("show");
   let current = null;
