@@ -60,7 +60,7 @@ For a full project setup walkthrough, see [Getting Started](./getting-started.ht
 
 - `signal`, `effect`, `computed`, `batch`, `onCleanup`
 - `h`, `tag`, `createTags`, `tags`
-- `Show`, `For`
+- `Show` (alias: `If`), `For`
 - `mount`, `enhance`
 
 See full API reference: [API](./api.html)

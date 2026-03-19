@@ -5,7 +5,7 @@ DOM-first rendering primitives.
 ## Import example
 
 ```js
-import { h, tag, createTags, tags, Show, For } from "@ztools.org/runtime";
+import { h, tag, createTags, tags, Show, If, For } from "@ztools.org/runtime";
 ```
 
 ## When to use
@@ -68,10 +68,19 @@ div({
 
 Conditional branch rendering.
 
+`If` is provided as an alias for `Show`.
+
 ```js
 const visible = signal(true);
 
 const view = Show(
+  () => visible(),
+  () => div("Visible content"),
+  () => div("Hidden content")
+);
+
+// same behavior:
+const view2 = If(
   () => visible(),
   () => div("Visible content"),
   () => div("Hidden content")

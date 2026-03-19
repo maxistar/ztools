@@ -394,6 +394,7 @@ function Show(when, render, fallback) {
   });
   return anchor;
 }
+var If = Show;
 function For(listSignal, renderItem, keyFn) {
   keyFn = keyFn || function(item, idx) {
     if (item && typeof item === "object") {
@@ -617,6 +618,7 @@ function defaultMapAttr(_name, newValue) {
 }
 export {
   For,
+  If,
   Show,
   __cleanupOwner,
   __createOwner,

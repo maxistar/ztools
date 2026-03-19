@@ -14,13 +14,14 @@
 <li><code>createTags()</code></li>
 <li><code>For(listSignal, renderItem, keyFn)</code></li>
 <li><code>h(target /* ...args */)</code></li>
+<li><code>If</code></li>
 <li><code>Show(when, render, fallback)</code></li>
 <li><code>tag(name)</code></li>
 <li><code>tags</code></li>
 </ul>
 <p>DOM-first rendering primitives.</p>
 <h2>Import example</h2>
-<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { h, tag, createTags, tags, Show, For } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { h, tag, createTags, tags, Show, If, For } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@ztools.org/runtime"</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span></code></pre>
 <h2>When to use</h2>
 <p>Use <code>dom.js</code> when building client-side UI directly with DOM nodes and reactive values.</p>
@@ -64,9 +65,17 @@
 <span class="line"></span></code></pre>
 <h2><code>Show(when, render, fallback?)</code></h2>
 <p>Conditional branch rendering.</p>
+<p><code>If</code> is provided as an alias for <code>Show</code>.</p>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> visible</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> view</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> Show</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> visible</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Visible content"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hidden content"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// same behavior:</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> view2</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> If</span><span style="color:#E1E4E8">(</span></span>
 <span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> visible</span><span style="color:#E1E4E8">(),</span></span>
 <span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Visible content"</span><span style="color:#E1E4E8">),</span></span>
 <span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hidden content"</span><span style="color:#E1E4E8">)</span></span>
