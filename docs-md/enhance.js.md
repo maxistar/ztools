@@ -49,23 +49,22 @@ Like `enhance`, but also collects `[data-ref]` nodes and passes them to setup as
 If multiple elements share the same `data-ref`, `refs[name]` becomes an array.
 
 ```html
-<div id="counter">
-  <button id="inc">+1</button>
-  <strong id="value">0</strong>
+<div id="counter" data-ref="root">
+  <button data-ref="inc">+1</button>
+  <strong data-ref="value">0</strong>
 </div>
 ```
 
 ```js
-import { signal, effect, enhance } from "@ztools.org/runtime";
+import { signal, effect, enhanceWithRefs } from "@ztools.org/runtime";
 
-enhance(document.getElementById("counter"), (root) => {
-  const valueEl = root.querySelector("#value");
-  const incBtn = root.querySelector("#inc");
-  const count = signal(Number(valueEl.textContent || 0));
+enhanceWithRefs(document.getElementById("counter"), ({ refs }) => {
+  const count = signal(Number(refs.value.textContent || 0));
 
-  incBtn.addEventListener("click", () => count.set(count() + 1));
+  refs.inc.addEventListener("click", () => count.set(count() + 1));
+
   effect(() => {
-    valueEl.textContent = String(count());
+    refs.value.textContent = String(count());
   });
 });
 ```
