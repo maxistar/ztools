@@ -31,6 +31,18 @@ const pages = [
 
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
 
+const apiSourceBySlug = {
+  "core.js": "src/core.js",
+  "dom.js": "src/dom.js",
+  "enhance.js": "src/enhance.js",
+  "ssr.js": "src/ssr.js",
+  "wc.js": "src/wc.js",
+  "css.js": "src/css.js",
+  "ztools.js": "ztools.js",
+  "ztools.client.js": "ztools.client.js",
+  "ztools.ssr.js": "ztools.ssr.js",
+};
+
 function navLink(currentSlug, slug, label) {
   const href = slug === "index" ? "./index.html" : `./${slug}.html`;
   if (slug === currentSlug) return `<a href="${href}"><strong>${label}</strong></a>`;
@@ -62,6 +74,62 @@ function wrapPage({ title, currentSlug, contentHtml }) {
 `;
 }
 
+function collectExports(source) {
+  const out = new Set();
+  const reExportAll = [];
+
+  for (const m of source.matchAll(/export\s+function\s+([A-Za-z_$][\w$]*)\s*\(/g)) out.add(m[1]);
+  for (const m of source.matchAll(/export\s+(?:const|let|var)\s+([A-Za-z_$][\w$]*)\b/g)) out.add(m[1]);
+  for (const m of source.matchAll(/export\s+class\s+([A-Za-z_$][\w$]*)\b/g)) out.add(m[1]);
+
+  for (const m of source.matchAll(/export\s*\{([^}]+)\}/g)) {
+    const parts = m[1].split(",").map((s) => s.trim()).filter(Boolean);
+    for (const p of parts) {
+      const asMatch = p.match(/^([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)$/);
+      out.add(asMatch ? asMatch[2] : p);
+    }
+  }
+
+  for (const m of source.matchAll(/export\s+\*\s+from\s+["']([^"']+)["']/g)) {
+    reExportAll.push(m[1]);
+  }
+
+  return {
+    names: [...out].sort((a, b) => a.localeCompare(b)),
+    reExportAll,
+  };
+}
+
+async function prependAutoExportsSection(page, markdownText) {
+  const relSource = apiSourceBySlug[page.slug];
+  if (!relSource) return markdownText;
+
+  const sourcePath = path.join(root, relSource);
+  let source;
+
+  try {
+    source = await readFile(sourcePath, "utf8");
+  } catch {
+    return markdownText;
+  }
+
+  const { names, reExportAll } = collectExports(source);
+  const lines = [];
+  lines.push("## Exports (auto)");
+  lines.push("");
+
+  if (names.length === 0 && reExportAll.length === 0) {
+    lines.push("- No named exports detected");
+  } else {
+    for (const n of names) lines.push(`- \`${n}\``);
+    for (const mod of reExportAll) lines.push(`- Re-export all from \`${mod}\``);
+  }
+
+  lines.push("");
+
+  return markdownText.replace(/^#\s+.*\n/, (m) => `${m}\n${lines.join("\n")}\n`);
+}
+
 async function renderMarkdownWithShiki(markdownText) {
   const codeBlocks = [];
   const tokenized = markdownText.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, (_, lang, code) => {
@@ -89,7 +157,8 @@ await mkdir(docsDir, { recursive: true });
 for (const page of pages) {
   const mdPath = path.join(docsMdDir, page.mdFile);
   const markdownText = await readFile(mdPath, "utf8");
-  const contentHtml = await renderMarkdownWithShiki(markdownText);
+  const enrichedMarkdown = await prependAutoExportsSection(page, markdownText);
+  const contentHtml = await renderMarkdownWithShiki(enrichedMarkdown);
   const fullHtml = wrapPage({ title: page.title, currentSlug: page.slug, contentHtml });
 
   const outFile = page.slug === "index" ? "index.html" : `${page.slug}.html`;
