@@ -52,7 +52,7 @@ Copy this into `index.html` and open it in a browser:
     <div id="app"></div>
 
     <script type="module">
-      import { signal, computed, createTags, mount } from "./dist/ztools.client.full.js";
+      import { signal, computed, createTags, mount } from "https://ztools.org/dist/ztools.client.full.js";
 
       const [div, p, button] = createTags("div", "p", "button");
 
