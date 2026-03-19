@@ -31,10 +31,28 @@
 <li>existing <code>Node</code> (enhance)</li>
 <li>component function</li>
 </ul>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> node</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> h</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"button"</span><span style="color:#E1E4E8">, { </span><span style="color:#B392F0">onClick</span><span style="color:#E1E4E8">: () </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"click"</span><span style="color:#E1E4E8">) }, </span><span style="color:#9ECBFF">"Save"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">document.body.</span><span style="color:#B392F0">appendChild</span><span style="color:#E1E4E8">(node);</span></span>
+<span class="line"></span></code></pre>
 <h2><code>tag(name)</code> and <code>createTags(...names)</code></h2>
 <p>Tag factory helpers.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> div</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> tag</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"div"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">p</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">button</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> createTags</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"p"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"button"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> ui</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  p</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hello"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">  button</span><span style="color:#E1E4E8">({ </span><span style="color:#B392F0">onClick</span><span style="color:#E1E4E8">: () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> alert</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hi"</span><span style="color:#E1E4E8">) }, </span><span style="color:#9ECBFF">"Click"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2><code>tags</code></h2>
 <p>Proxy-based dynamic tag creators.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">section</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">h2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">ul</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">li</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tags;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> block</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> section</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">  h2</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Items"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">  ul</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">li</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"A"</span><span style="color:#E1E4E8">), </span><span style="color:#B392F0">li</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"B"</span><span style="color:#E1E4E8">), </span><span style="color:#B392F0">li</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"C"</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2>Props model</h2>
 <p>Supports legacy and explicit channels:</p>
 <pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#B392F0">div</span><span style="color:#E1E4E8">({</span></span>
@@ -46,8 +64,27 @@
 <span class="line"></span></code></pre>
 <h2><code>Show(when, render, fallback?)</code></h2>
 <p>Conditional branch rendering.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> visible</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> view</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> Show</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> visible</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Visible content"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">  () </span><span style="color:#F97583">=></span><span style="color:#B392F0"> div</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Hidden content"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2><code>For(listSignal, renderItem, keyFn?)</code></h2>
 <p>Keyed list rendering with efficient node reuse/reorder.</p>
+<pre class="shiki github-dark" style="background-color:#24292e;color:#e1e4e8" tabindex="0"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> rows</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> signal</span><span style="color:#E1E4E8">([</span></span>
+<span class="line"><span style="color:#E1E4E8">  { id: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, name: </span><span style="color:#9ECBFF">"Alice"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">  { id: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, name: </span><span style="color:#9ECBFF">"Bob"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">]);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> listNode</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> For</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  rows,</span></span>
+<span class="line"><span style="color:#E1E4E8">  (</span><span style="color:#FFAB70">row</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> li</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> row.name),</span></span>
+<span class="line"><span style="color:#E1E4E8">  (</span><span style="color:#FFAB70">row</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> row.id</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span></code></pre>
 <h2>Related APIs</h2>
 <ul>
 <li><a href="./core.js.html"><code>core.js</code></a></li>
