@@ -74,27 +74,6 @@ Legacy alias for `enhance(root, fn)`.
 Prefer `enhance` in new code.
 If multiple elements share the same `data-ref`, `refs[name]` becomes an array.
 
-```html
-<div id="counter" data-ref="root">
-  <button data-ref="inc">+1</button>
-  <strong data-ref="value">0</strong>
-</div>
-```
-
-```js
-import { signal, effect, enhanceWithRefs } from "@ztools.org/runtime";
-
-enhanceWithRefs(document.getElementById("counter"), ({ refs }) => {
-  const count = signal(Number(refs.value.textContent || 0));
-
-  refs.inc.addEventListener("click", () => count.set(count() + 1));
-
-  effect(() => {
-    refs.value.textContent = String(count());
-  });
-});
-```
-
 ## Examples
 
 - [SSR counter with refs](./demo/ssr-counter-refs/)
