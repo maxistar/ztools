@@ -74,19 +74,51 @@ function wrapPage({ title, currentSlug, contentHtml }) {
 `;
 }
 
+function isPublicExportName(name) {
+  return !!name && !name.startsWith("_");
+}
+
 function collectExports(source) {
-  const out = new Set();
+  const names = new Set();
+  const signatures = new Map();
   const reExportAll = [];
 
-  for (const m of source.matchAll(/export\s+function\s+([A-Za-z_$][\w$]*)\s*\(/g)) out.add(m[1]);
-  for (const m of source.matchAll(/export\s+(?:const|let|var)\s+([A-Za-z_$][\w$]*)\b/g)) out.add(m[1]);
-  for (const m of source.matchAll(/export\s+class\s+([A-Za-z_$][\w$]*)\b/g)) out.add(m[1]);
+  for (const m of source.matchAll(/export\s+function\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)/g)) {
+    const name = m[1];
+    if (!isPublicExportName(name)) continue;
+    names.add(name);
+    signatures.set(name, `${name}(${m[2].trim()})`);
+  }
+
+  for (const m of source.matchAll(/export\s+class\s+([A-Za-z_$][\w$]*)\b/g)) {
+    const name = m[1];
+    if (!isPublicExportName(name)) continue;
+    names.add(name);
+    signatures.set(name, `${name} (class)`);
+  }
+
+  for (const m of source.matchAll(/export\s+(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*\(([^)]*)\)\s*=>/g)) {
+    const name = m[1];
+    if (!isPublicExportName(name)) continue;
+    names.add(name);
+    signatures.set(name, `${name}(${m[2].trim()})`);
+  }
+
+  for (const m of source.matchAll(/export\s+(?:const|let|var)\s+([A-Za-z_$][\w$]*)\b/g)) {
+    const name = m[1];
+    if (!isPublicExportName(name)) continue;
+    names.add(name);
+    if (!signatures.has(name)) signatures.set(name, name);
+  }
 
   for (const m of source.matchAll(/export\s*\{([^}]+)\}/g)) {
     const parts = m[1].split(",").map((s) => s.trim()).filter(Boolean);
     for (const p of parts) {
       const asMatch = p.match(/^([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)$/);
-      out.add(asMatch ? asMatch[2] : p);
+      const exported = asMatch ? asMatch[2] : p;
+      if (!isPublicExportName(exported)) continue;
+      names.add(exported);
+      if (!signatures.has(exported)) signatures.set(exported, exported);
     }
   }
 
@@ -94,8 +126,11 @@ function collectExports(source) {
     reExportAll.push(m[1]);
   }
 
+  const ordered = [...names].sort((a, b) => a.localeCompare(b));
+
   return {
-    names: [...out].sort((a, b) => a.localeCompare(b)),
+    names: ordered,
+    signatures: ordered.map((name) => signatures.get(name) || name),
     reExportAll,
   };
 }
@@ -113,15 +148,15 @@ async function prependAutoExportsSection(page, markdownText) {
     return markdownText;
   }
 
-  const { names, reExportAll } = collectExports(source);
+  const { signatures, reExportAll } = collectExports(source);
   const lines = [];
   lines.push("## Exports (auto)");
   lines.push("");
 
-  if (names.length === 0 && reExportAll.length === 0) {
+  if (signatures.length === 0 && reExportAll.length === 0) {
     lines.push("- No named exports detected");
   } else {
-    for (const n of names) lines.push(`- \`${n}\``);
+    for (const sig of signatures) lines.push(`- \`${sig}\``);
     for (const mod of reExportAll) lines.push(`- Re-export all from \`${mod}\``);
   }
 
