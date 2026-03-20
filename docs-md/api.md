@@ -1,6 +1,6 @@
 # API
 
-API entry page for sub-pages.
+New here? Start with [Getting Started](./getting-started.html).
 
 ## Core runtime files
 
