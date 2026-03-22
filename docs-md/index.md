@@ -17,12 +17,6 @@ See also: [Philosophy](./philosophy.html)
 - SVG-friendly rendering (custom SVG elements + reactive attributes)
 - Zero runtime dependencies in the browser + optional full standalone bundles (`ztools.client.full.js` ≈ 16.3 KB, `ztools.ssr.full.js` ≈ 2.9 KB — honest raw size, uncompressed, not minified)
 
-## Install
-
-```bash
-npm install @ztools.org/runtime
-```
-
 ## Zero-setup (single HTML file)
 
 Copy this into `index.html` and open it in a browser:
