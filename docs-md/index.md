@@ -28,7 +28,7 @@ Copy this into `index.html` and open it in a browser:
     <div id="app"></div>
 
     <script type="module">
-      import { signal, computed, tags, mount } from "https://ztools.org/dist/ztools.client.full.js";
+      import { signal, computed, tags, mount } from "https://unpkg.com/@ztools.org/runtime/dist/ztools.client.full.js";
 
       const { div, p, button } = tags;
 
